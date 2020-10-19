@@ -5,7 +5,7 @@ namespace LibNoise.Generator
     /// <summary>
     /// Provides a noise module that outputs a three-dimensional perlin noise. [GENERATOR]
     /// </summary>
-    public class Perlin : ModuleBase
+    public class Perlin : SerializableModuleBase
     {
         #region Fields
 

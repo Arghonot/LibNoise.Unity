@@ -7,7 +7,7 @@ namespace LibNoise.Operator
     /// coordinate of the input value before returning the output value from
     /// a source module. [OPERATOR]
     /// </summary>
-    public class Displace : ModuleBase
+    public class Displace : SerializableModuleBase
     {
         #region Constructors
 

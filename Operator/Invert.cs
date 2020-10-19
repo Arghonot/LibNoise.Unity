@@ -5,7 +5,7 @@ namespace LibNoise.Operator
     /// <summary>
     /// Provides a noise module that inverts the output value from a source module. [OPERATOR]
     /// </summary>
-    public class Invert : ModuleBase
+    public class Invert : SerializableModuleBase
     {
         #region Constructors
 

@@ -6,7 +6,7 @@ namespace LibNoise.Generator
     /// <summary>
     /// Provides a noise module that outputs a three-dimensional billowy noise. [GENERATOR]
     /// </summary>
-    public class Billow : ModuleBase
+    public class Billow : SerializableModuleBase
     {
         #region Fields
 

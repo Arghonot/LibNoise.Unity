@@ -8,9 +8,11 @@ namespace LibNoise.Operator
     /// Provides a noise module that maps the output value from a source module onto an
     /// arbitrary function curve. [OPERATOR]
     /// </summary>
-    public class Curve : ModuleBase
+    public class Curve : SerializableModuleBase
     {
         #region Fields
+
+        private AnimationCurve curve;
 
         private readonly List<KeyValuePair<double, double>> _data = new List<KeyValuePair<double, double>>();
 
@@ -60,6 +62,11 @@ namespace LibNoise.Operator
 
         #region Methods
 
+        public void SetCurve(AnimationCurve newcurve)
+        {
+            curve = newcurve;
+        }
+
         /// <summary>
         /// Adds a control point to the curve.
         /// </summary>
@@ -100,32 +107,35 @@ namespace LibNoise.Operator
         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
-            Debug.Assert(Modules[0] != null);
-            Debug.Assert(ControlPointCount >= 4);
-            var smv = Modules[0].GetValue(x, y, z);
-            int ip;
-            for (ip = 0; ip < _data.Count; ip++)
-            {
-                if (smv < _data[ip].Key)
-                {
-                    break;
-                }
-            }
-            var i0 = Mathf.Clamp(ip - 2, 0, _data.Count - 1);
-            var i1 = Mathf.Clamp(ip - 1, 0, _data.Count - 1);
-            var i2 = Mathf.Clamp(ip, 0, _data.Count - 1);
-            var i3 = Mathf.Clamp(ip + 1, 0, _data.Count - 1);
-            if (i1 == i2)
-            {
-                return _data[i1].Value;
-            }
-            //double ip0 = _data[i1].Value;
-            //double ip1 = _data[i2].Value;
-            var ip0 = _data[i1].Key;
-            var ip1 = _data[i2].Key;
-            var a = (smv - ip0) / (ip1 - ip0);
-            return Utils.InterpolateCubic(_data[i0].Value, _data[i1].Value, _data[i2].Value,
-                _data[i3].Value, a);
+            double val = Modules[0].GetValue(x, y, z);
+
+            return curve.Evaluate((float)val);
+            //Debug.Assert(Modules[0] != null);
+            //Debug.Assert(ControlPointCount >= 4);
+            //var smv = Modules[0].GetValue(x, y, z);
+            //int ip;
+            //for (ip = 0; ip < _data.Count; ip++)
+            //{
+            //    if (smv < _data[ip].Key)
+            //    {
+            //        break;
+            //    }
+            //}
+            //var i0 = Mathf.Clamp(ip - 2, 0, _data.Count - 1);
+            //var i1 = Mathf.Clamp(ip - 1, 0, _data.Count - 1);
+            //var i2 = Mathf.Clamp(ip, 0, _data.Count - 1);
+            //var i3 = Mathf.Clamp(ip + 1, 0, _data.Count - 1);
+            //if (i1 == i2)
+            //{
+            //    return _data[i1].Value;
+            //}
+            ////double ip0 = _data[i1].Value;
+            ////double ip1 = _data[i2].Value;
+            //var ip0 = _data[i1].Key;
+            //var ip1 = _data[i2].Key;
+            //var a = (smv - ip0) / (ip1 - ip0);
+            //return Utils.InterpolateCubic(_data[i0].Value, _data[i1].Value, _data[i2].Value,
+            //    _data[i3].Value, a);
         }
 
         #endregion

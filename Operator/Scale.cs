@@ -6,7 +6,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that scales the coordinates of the input value before
     /// returning the output value from a source module. [OPERATOR]
     /// </summary>
-    public class Scale : ModuleBase
+    public class Scale : SerializableModuleBase
     {
         #region Fields
 

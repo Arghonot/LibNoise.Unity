@@ -6,7 +6,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that clamps the output value from a source module to a
     /// range of values. [OPERATOR]
     /// </summary>
-    public class Clamp : ModuleBase
+    public class Clamp : SerializableModuleBase
     {
         #region Fields
 

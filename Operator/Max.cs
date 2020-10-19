@@ -7,7 +7,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that outputs the larger of the two output values from two
     /// source modules. [OPERATOR]
     /// </summary>
-    public class Max : ModuleBase
+    public class Max : SerializableModuleBase
     {
         #region Constructors
 

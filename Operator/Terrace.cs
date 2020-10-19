@@ -9,7 +9,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that maps the output value from a source module onto a
     /// terrace-forming curve. [OPERATOR]
     /// </summary>
-    public class Terrace : ModuleBase
+    public class Terrace : SerializableModuleBase
     {
         #region Fields
 
@@ -137,8 +137,6 @@ namespace LibNoise.Operator
         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
-            Debug.Assert(Modules[0] != null);
-            Debug.Assert(ControlPointCount >= 2);
             var smv = Modules[0].GetValue(x, y, z);
             int ip;
             for (ip = 0; ip < _data.Count; ip++)
@@ -154,6 +152,7 @@ namespace LibNoise.Operator
             {
                 return _data[i1];
             }
+
             var v0 = _data[i0];
             var v1 = _data[i1];
             var a = (smv - v0) / (v1 - v0);

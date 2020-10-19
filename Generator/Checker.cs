@@ -5,7 +5,7 @@ namespace LibNoise.Generator
     /// <summary>
     /// Provides a noise module that outputs a checkerboard pattern. [GENERATOR]
     /// </summary>
-    public class Checker : ModuleBase
+    public class Checker : SerializableModuleBase
     {
         #region Constructors
 

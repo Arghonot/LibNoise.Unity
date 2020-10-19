@@ -6,7 +6,7 @@ namespace LibNoise.Generator
     /// <summary>
     /// Provides a noise module that outputs 3-dimensional ridged-multifractal noise. [GENERATOR]
     /// </summary>
-    public class RidgedMultifractal : ModuleBase
+    public class RidgedMultifractal : SerializableModuleBase
     {
         #region Fields
 

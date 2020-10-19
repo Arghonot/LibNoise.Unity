@@ -6,7 +6,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that outputs the difference of the two output values from two
     /// source modules. [OPERATOR]
     /// </summary>
-    public class Subtract : ModuleBase
+    public class Subtract : SerializableModuleBase
     {
         #region Constructors
 

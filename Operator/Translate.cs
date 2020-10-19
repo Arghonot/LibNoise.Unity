@@ -6,7 +6,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that moves the coordinates of the input value before
     /// returning the output value from a source module. [OPERATOR]
     /// </summary>
-    public class Translate : ModuleBase
+    public class Translate : SerializableModuleBase
     {
         #region Fields
 

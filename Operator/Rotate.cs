@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Debug = System.Diagnostics.Debug;
 
 namespace LibNoise.Operator
 {
@@ -8,7 +7,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that rotates the input value around the origin before
     /// returning the output value from a source module. [OPERATOR]
     /// </summary>
-    public class Rotate : ModuleBase
+    public class Rotate : SerializableModuleBase
     {
         #region Fields
 

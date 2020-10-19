@@ -6,7 +6,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that outputs a weighted blend of the output values from
     /// two source modules given the output value supplied by a control module. [OPERATOR]
     /// </summary>
-    public class Blend : ModuleBase
+    public class Blend : SerializableModuleBase
     {
         #region Constructors
 

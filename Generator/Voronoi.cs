@@ -5,7 +5,7 @@ namespace LibNoise.Generator
     /// <summary>
     /// Provides a noise module that outputs Voronoi cells. [GENERATOR]
     /// </summary>
-    public class Voronoi : ModuleBase
+    public class Voronoi : SerializableModuleBase
     {
         #region Fields
 

@@ -6,7 +6,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that applies a scaling factor and a bias to the output
     /// value from a source module. [OPERATOR]
     /// </summary>
-    public class ScaleBias : ModuleBase
+    public class ScaleBias : SerializableModuleBase
     {
         #region Constructors
 

@@ -7,7 +7,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that maps the output value from a source module onto an
     /// exponential curve. [OPERATOR]
     /// </summary>
-    public class Exponent : ModuleBase
+    public class Exponent : SerializableModuleBase
     {
         #region Fields
 

@@ -398,7 +398,7 @@ namespace LibNoise
         /// <param name="lat">The latitude of the point.</param>
         /// <param name="lon">The longitude of the point.</param>
         /// <returns>The corresponding noise map value.</returns>
-        private double GenerateSpherical(double lat, double lon)
+        public double GenerateSpherical(double lat, double lon)
         {
             var r = Math.Cos(Mathf.Deg2Rad * lat);
             return _generator.GetValue(r * Math.Cos(Mathf.Deg2Rad * lon), Math.Sin(Mathf.Deg2Rad * lat),

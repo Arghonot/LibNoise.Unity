@@ -7,7 +7,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that that randomly displaces the input value before
     /// returning the output value from a source module. [OPERATOR]
     /// </summary>
-    public class Turbulence : ModuleBase
+    public class Turbulence : SerializableModuleBase
     {
         #region Constants
 

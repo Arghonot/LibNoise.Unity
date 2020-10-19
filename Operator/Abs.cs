@@ -7,7 +7,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that outputs the absolute value of the output value from
     /// a source module. [OPERATOR]
     /// </summary>
-    public class Abs : ModuleBase
+    public class Abs : SerializableModuleBase
     {
         #region Constructors
 

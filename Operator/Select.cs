@@ -6,7 +6,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that outputs the value selected from one of two source
     /// modules chosen by the output value from a control module. [OPERATOR]
     /// </summary>
-    public class Select : ModuleBase
+    public class Select : SerializableModuleBase
     {
         #region Fields
 

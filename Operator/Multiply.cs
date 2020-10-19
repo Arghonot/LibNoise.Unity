@@ -6,7 +6,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that outputs the product of the two output values from
     /// two source modules. [OPERATOR]
     /// </summary>
-    public class Multiply : ModuleBase
+    public class Multiply : SerializableModuleBase
     {
         #region Constructors
 
