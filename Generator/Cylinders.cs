@@ -5,7 +5,7 @@ namespace LibNoise.Generator
     /// <summary>
     /// Provides a noise module that outputs concentric cylinders. [GENERATOR]
     /// </summary>
-    public class Cylinders : ModuleBase
+    public class Cylinders : SerializableModuleBase
     {
         #region Fields
 
