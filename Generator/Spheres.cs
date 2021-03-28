@@ -5,7 +5,7 @@ namespace LibNoise.Generator
     /// <summary>
     /// Provides a noise module that outputs concentric spheres. [GENERATOR]
     /// </summary>
-    public class Spheres : ModuleBase
+    public class Spheres : SerializableModuleBase
     {
         #region Fields
 
