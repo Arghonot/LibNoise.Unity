@@ -7,7 +7,7 @@ namespace LibNoise.Operator
     /// Provides a noise module that outputs value from a first source module
     /// to the power of the output value from a second source module. [OPERATOR]
     /// </summary>
-    public class Power : ModuleBase
+    public class Power : SerializableModuleBase
     {
         #region Constructors
 
