@@ -38,7 +38,7 @@ namespace LibNoise
         /// Initializes a new instance of Helpers.
         /// </summary>
         /// <param name="count">The number of source modules.</param>
-        protected SerializableModuleBase(int count)
+        public SerializableModuleBase(int count)
         {
             if (count > 0)
             {

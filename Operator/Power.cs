@@ -67,8 +67,8 @@ namespace LibNoise.Operator
         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
-            Debug.Assert(Modules[0] != null);
-            Debug.Assert(Modules[1] != null);
+            System.Diagnostics.Debug.Assert(Modules[0] != null);
+            System.Diagnostics.Debug.Assert(Modules[1] != null);
             return Math.Pow(Modules[0].GetValue(x, y, z), Modules[1].GetValue(x, y, z));
         }
 
