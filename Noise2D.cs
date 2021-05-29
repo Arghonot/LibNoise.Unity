@@ -40,7 +40,7 @@ namespace LibNoise
             // Uncropped data. This has a border of extra noise data used for calculating normal map edges.
 
         private float _borderValue = float.NaN;
-        private ModuleBase _generator;
+        private SerializableModuleBase _generator;
 
         #endregion
 
@@ -67,7 +67,7 @@ namespace LibNoise
         /// </summary>
         /// <param name="size">The width and height of the noise map.</param>
         /// <param name="generator">The generator module.</param>
-        public Noise2D(int size, ModuleBase generator)
+        public Noise2D(int size, SerializableModuleBase generator)
             : this(size, size, generator)
         {
         }
@@ -78,7 +78,7 @@ namespace LibNoise
         /// <param name="width">The width of the noise map.</param>
         /// <param name="height">The height of the noise map.</param>
         /// <param name="generator">The generator module.</param>
-        public Noise2D(int width, int height, ModuleBase generator = null)
+        public Noise2D(int width, int height, SerializableModuleBase generator = null)
         {
             _generator = generator;
             _width = width;
@@ -171,7 +171,7 @@ namespace LibNoise
         /// <summary>
         /// Gets or sets the generator module.
         /// </summary>
-        public ModuleBase Generator
+        public SerializableModuleBase Generator
         {
             get { return _generator; }
             set { _generator = value; }

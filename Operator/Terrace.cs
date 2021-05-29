@@ -32,7 +32,7 @@ namespace LibNoise.Operator
         /// Initializes a new instance of Terrace.
         /// </summary>
         /// <param name="input">The input module.</param>
-        public Terrace(ModuleBase input)
+        public Terrace(SerializableModuleBase input)
             : base(1)
         {
             Modules[0] = input;
@@ -43,7 +43,7 @@ namespace LibNoise.Operator
         /// </summary>
         /// <param name="inverted">Indicates whether the terrace curve is inverted.</param>
         /// <param name="input">The input module.</param>
-        public Terrace(bool inverted, ModuleBase input)
+        public Terrace(bool inverted, SerializableModuleBase input)
             : base(1)
         {
             Modules[0] = input;

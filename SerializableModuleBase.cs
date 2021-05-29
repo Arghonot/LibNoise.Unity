@@ -23,11 +23,12 @@ namespace LibNoise
     /// <summary>
     /// Base class for noise modules.
     /// </summary>
-    public abstract class ModuleBase : IDisposable
+    [System.Serializable]
+    public class SerializableModuleBase : IDisposable
     {
         #region Fields
 
-        private ModuleBase[] _modules;
+        private SerializableModuleBase[] _modules;
 
         #endregion
 
@@ -37,11 +38,11 @@ namespace LibNoise
         /// Initializes a new instance of Helpers.
         /// </summary>
         /// <param name="count">The number of source modules.</param>
-        protected ModuleBase(int count)
+        protected SerializableModuleBase(int count)
         {
             if (count > 0)
             {
-                _modules = new ModuleBase[count];
+                _modules = new SerializableModuleBase[count];
             }
         }
 
@@ -54,7 +55,7 @@ namespace LibNoise
         /// </summary>
         /// <param name="index">The index of the source module to aquire.</param>
         /// <returns>The requested source module.</returns>
-        public virtual ModuleBase this[int index]
+        public virtual SerializableModuleBase this[int index]
         {
             get
             {
@@ -88,7 +89,7 @@ namespace LibNoise
         #endregion
 
         #region Properties
-        protected ModuleBase[] Modules
+        protected SerializableModuleBase[] Modules
         {
             get { return _modules; }
         }
@@ -104,6 +105,20 @@ namespace LibNoise
         #endregion
 
         #region Methods
+        public virtual RenderTexture GetSphericalValueGPU(Vector2 size)
+        {
+            return null;
+        }
+
+        protected RenderTexture GetImage(Material material, Vector2 size)
+        {
+            RenderTexture rdB = new RenderTexture((int)size.x, (int)size.y, 16);
+
+            RenderTexture.active = rdB;
+            Graphics.Blit(Texture2D.whiteTexture, rdB, material);
+
+            return rdB;
+        }
 
         /// <summary>
         /// Returns the output value for the given input coordinates.
@@ -112,7 +127,10 @@ namespace LibNoise
         /// <param name="y">The input coordinate on the y-axis.</param>
         /// <param name="z">The input coordinate on the z-axis.</param>
         /// <returns>The resulting output value.</returns>
-        public abstract double GetValue(double x, double y, double z);
+        public virtual double GetValue(double x, double y, double z)
+        {
+            return 1;
+        }
 
         /// <summary>
         /// Returns the output value for the given input coordinates.

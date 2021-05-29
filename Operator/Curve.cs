@@ -32,7 +32,7 @@ namespace LibNoise.Operator
         /// Initializes a new instance of Curve.
         /// </summary>
         /// <param name="input">The input module.</param>
-        public Curve(ModuleBase input)
+        public Curve(SerializableModuleBase input)
             : base(1)
         {
             Modules[0] = input;

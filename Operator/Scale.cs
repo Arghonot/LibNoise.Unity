@@ -30,7 +30,7 @@ namespace LibNoise.Operator
         /// Initializes a new instance of Scale.
         /// </summary>
         /// <param name="input">The input module.</param>
-        public Scale(ModuleBase input)
+        public Scale(SerializableModuleBase input)
             : base(1)
         {
             Modules[0] = input;
@@ -43,7 +43,7 @@ namespace LibNoise.Operator
         /// <param name="y">The scaling on the y-axis.</param>
         /// <param name="z">The scaling on the z-axis.</param>
         /// <param name="input">The input module.</param>
-        public Scale(double x, double y, double z, ModuleBase input)
+        public Scale(double x, double y, double z, SerializableModuleBase input)
             : base(1)
         {
             Modules[0] = input;
