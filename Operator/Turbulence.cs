@@ -160,7 +160,7 @@ namespace LibNoise.Operator
         {
             _materialGPU = new Material(_sphericalGPUShader);
 
-            _materialGPU.SetTexture("_TextureA", new Perlin().GetSphericalValueGPU(size));
+            _materialGPU.SetTexture("_TextureA", Modules[0].GetSphericalValueGPU(size));
             _materialGPU.SetTexture("_PerlinA", new Perlin().GetSphericalValueGPU(size));
             _materialGPU.SetTexture("_PerlinB", new Perlin().GetSphericalValueGPU(size));
             _materialGPU.SetTexture("_PerlinC", new Perlin().GetSphericalValueGPU(size));

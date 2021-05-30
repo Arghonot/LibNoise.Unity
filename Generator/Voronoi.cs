@@ -101,7 +101,7 @@ namespace LibNoise.Generator
             _materialGPU.SetFloat("_Displacement", (float)_displacement);
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
             _materialGPU.SetFloat("_Distance", _distance ? 1f : 0f);
-            _materialGPU.SetVector("_OffsetPosition", new Vector4(_seed, _seed, _seed, _seed));
+            _materialGPU.SetInt("_Seed", _seed);
 
             return GetImage(_materialGPU, size);
         }
