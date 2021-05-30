@@ -11,7 +11,7 @@ namespace LibNoise.Operator
     {
         #region Fields
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Add");
+        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Combiners/Add");
         private Material _materialGPU;
 
         #endregion
