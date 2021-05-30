@@ -392,6 +392,11 @@ namespace LibNoise
             }
         }
 
+        public RenderTexture GenerateSphericalGPU()
+        {
+            return _generator.GetSphericalValueGPU(new Vector2(_width, Height));
+        }
+
         /// <summary>
         /// Generates a spherical projection of a point in the noise map.
         /// </summary>
