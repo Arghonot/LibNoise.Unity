@@ -91,7 +91,7 @@ namespace LibNoise.Operator
         /// </summary>
         public double Z
         {
-            get { return _x; }
+            get { return _z; }
             set { SetAngles(_x, _y, value); }
         }
 
@@ -142,8 +142,8 @@ namespace LibNoise.Operator
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetSphericalValueGPU(size));
             _materialGPU.SetFloat("_X", (float)X);
-            _materialGPU.SetFloat("_Y", (float)X);
-            _materialGPU.SetFloat("_Z", (float)X);
+            _materialGPU.SetFloat("_Y", (float)Y);
+            _materialGPU.SetFloat("_Z", (float)Z);
 
             return GetImage(_materialGPU, size);
         }

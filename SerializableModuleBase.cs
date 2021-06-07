@@ -28,7 +28,7 @@ namespace LibNoise
     {
         #region Fields
 
-        private SerializableModuleBase[] _modules;
+        [NonSerialized] private SerializableModuleBase[] _modules;
 
         #endregion
 
