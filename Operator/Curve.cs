@@ -14,7 +14,8 @@ namespace LibNoise.Operator
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Curve");
         private Material _materialGPU;
 
-        private AnimationCurve curve;
+        private Texture2D curve;
+        private AnimationCurve mathematicalCurve;
 
         private readonly List<KeyValuePair<double, double>> _data = new List<KeyValuePair<double, double>>();
 
@@ -64,7 +65,7 @@ namespace LibNoise.Operator
 
         #region Methods
 
-        public void SetCurve(AnimationCurve newcurve)
+        public void SetCurve(Texture2D newcurve)
         {
             curve = newcurve;
         }
@@ -107,10 +108,18 @@ namespace LibNoise.Operator
         /// <returns>The generated image.</returns>
         public override RenderTexture GetSphericalValueGPU(Vector2 size)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            RenderTexture src = Modules[0].GetSphericalValueGPU(size);
+            Texture2D crv = curve;
 
-            _materialGPU.SetTexture("_MainTex", Modules[0].GetSphericalValueGPU(size));
-            _materialGPU.SetTexture("_Curve", Xnoise.UtilsFunctions.GetCurveAsTexture(curve));
+            _materialGPU = new Material(_sphericalGPUShader);
+            src.wrapMode = TextureWrapMode.Clamp;
+            src.filterMode = FilterMode.Point;
+            crv.wrapMode = TextureWrapMode.Clamp;
+            crv.filterMode = FilterMode.Point;
+            crv.Apply();
+
+            _materialGPU.SetTexture("_MainTex", src);
+            _materialGPU.SetTexture("_Curve", crv);
 
             return GetImage(_materialGPU, size);
         }
@@ -127,7 +136,7 @@ namespace LibNoise.Operator
         {
             double val = Modules[0].GetValue(x, y, z);
 
-            return curve.Evaluate((float)val);
+            return mathematicalCurve.Evaluate((float)val);
         }
 
         #endregion

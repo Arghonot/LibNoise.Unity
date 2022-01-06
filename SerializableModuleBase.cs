@@ -1,10 +1,43 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
 
 namespace LibNoise
 {
+
+    public static class RdbCollection
+    {
+        public static Stack<RenderTexture> rdbs = new Stack<RenderTexture>();
+        public static Stack<RenderTexture> usedRdbs;
+
+        public static void StartStacking()
+        {
+            rdbs = new Stack<RenderTexture>();
+        }
+
+        public static void AddToStack(RenderTexture rdb)
+        {
+            rdbs.Push(rdb);
+            rdb.DiscardContents();
+        }
+
+        public static void StopStacking()
+        {
+            //usedRdbs = new List<RenderTexture>();
+        }
+
+        public static RenderTexture GetFromStack(Vector2 size)
+        {
+            if (rdbs.Count > 0)
+            {
+                return rdbs.Pop();
+            }
+
+            return new RenderTexture((int)size.x, (int)size.y, 16);
+        }
+    }
 
     #region Enumerations
 
@@ -104,7 +137,7 @@ namespace LibNoise
 
         #endregion
 
-        #region Methods
+        #region Methods 
         public virtual RenderTexture GetSphericalValueGPU(Vector2 size)
         {
             return null;
@@ -112,10 +145,16 @@ namespace LibNoise
 
         protected RenderTexture GetImage(Material material, Vector2 size)
         {
-            RenderTexture rdB = new RenderTexture((int)size.x, (int)size.y, 16);
+            RenderTexture rdB = RdbCollection.GetFromStack(size);
+
+            //RenderTexture rdB = new RenderTexture((int)size.x, (int)size.y, 16);
 
             RenderTexture.active = rdB;
             Graphics.Blit(Texture2D.whiteTexture, rdB, material);
+
+            RdbCollection.AddToStack(rdB);
+
+            UnityEngine.Debug.Log(size);
 
             return rdB;
         }
