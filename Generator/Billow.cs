@@ -133,12 +133,7 @@ namespace LibNoise.Generator
             _materialGPU.SetFloat("_Persistence", (float)_persistence);
             _materialGPU.SetFloat("_Octaves", _octaveCount);
             _materialGPU.SetVector("_OffsetPosition", new Vector4(_seed, _seed, _seed, _seed));
-            Debug.Log("size    " + size);
-            Debug.Log("_Frequency    " + _materialGPU.GetFloat("_Frequency") + " " + _frequency);
-            Debug.Log("_OffsetPosition    " + _materialGPU.GetVector("_OffsetPosition") + " " + _seed);
-            Debug.Log("_Lacunarity   " + _materialGPU.GetFloat("_Lacunarity") + " " + _lacunarity);
-            Debug.Log("_Persistence    " + _materialGPU.GetInt("_Persistence") + " " + _persistence);
-            Debug.Log("_Octaves    " + _materialGPU.GetInt("_Octaves") + " " + _octaveCount);
+
             return GetImage(_materialGPU, size);
         }
 

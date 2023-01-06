@@ -15,7 +15,7 @@ namespace LibNoise.Operator
         private Material _materialGPU;
 
         private Texture2D curve;
-        private AnimationCurve mathematicalCurve;
+        public AnimationCurve mathematicalCurve;
 
         private readonly List<KeyValuePair<double, double>> _data = new List<KeyValuePair<double, double>>();
 

@@ -19,8 +19,8 @@ namespace LibNoise
 
         public static void AddToStack(RenderTexture rdb)
         {
-            rdbs.Push(rdb);
-            rdb.DiscardContents();
+            //rdbs.Push(rdb);
+            //rdb.DiscardContents();
         }
 
         public static void StopStacking()
@@ -30,12 +30,12 @@ namespace LibNoise
 
         public static RenderTexture GetFromStack(Vector2 size)
         {
-            if (rdbs.Count > 0)
-            {
-                return rdbs.Pop();
-            }
+            //if (rdbs.Count > 0)
+            //{
+            //    return rdbs.Pop();
+            //}
 
-            return new RenderTexture((int)size.x, (int)size.y, 16);
+            return new RenderTexture((int)size.x, (int)size.y, 16, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
         }
     }
 
@@ -143,18 +143,34 @@ namespace LibNoise
             return null;
         }
 
+        protected Texture2D duplicateTexture(Texture2D source)
+        {
+            RenderTexture renderTex = RenderTexture.GetTemporary(
+                        source.width,
+                        source.height,
+                        0,
+                        RenderTextureFormat.Default,
+                        RenderTextureReadWrite.Linear);
+
+            Graphics.Blit(source, renderTex);
+            RenderTexture previous = RenderTexture.active;
+            RenderTexture.active = renderTex;
+            Texture2D readableText = new Texture2D(source.width, source.height);
+            readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
+            readableText.Apply();
+            RenderTexture.active = previous;
+            RenderTexture.ReleaseTemporary(renderTex);
+            return readableText;
+        }
+
         protected RenderTexture GetImage(Material material, Vector2 size)
         {
             RenderTexture rdB = RdbCollection.GetFromStack(size);
-
-            //RenderTexture rdB = new RenderTexture((int)size.x, (int)size.y, 16);
 
             RenderTexture.active = rdB;
             Graphics.Blit(Texture2D.whiteTexture, rdB, material);
 
             RdbCollection.AddToStack(rdB);
-
-            UnityEngine.Debug.Log(size);
 
             return rdB;
         }
