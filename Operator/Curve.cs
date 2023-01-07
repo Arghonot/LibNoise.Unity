@@ -123,6 +123,15 @@ namespace LibNoise.Operator
 
             return GetImage(_materialGPU, size);
         }
+
+        private void DebugCurvePoints()
+        {
+            for (int i = 0; i < length; i++)
+            {
+
+            }
+        }
+
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>
