@@ -12,7 +12,6 @@ namespace LibNoise.Generator
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/SphericalBillow");
         private Material _materialGPU;
-
         private double _frequency = 1.0;
         private double _lacunarity = 2.0;
         private QualityMode _quality = QualityMode.Medium;

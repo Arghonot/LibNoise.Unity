@@ -12,7 +12,6 @@ namespace LibNoise.Generator
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/SphericalSpheres");
         private Material _materialGPU;
-
         private double _frequency = 1.0;
 
         #endregion
@@ -68,7 +67,6 @@ namespace LibNoise.Generator
 
             return GetImage(_materialGPU, size);
         }
-
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>

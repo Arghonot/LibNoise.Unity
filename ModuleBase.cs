@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
@@ -7,61 +6,28 @@ using Debug = System.Diagnostics.Debug;
 namespace LibNoise
 {
 
-    public static class RdbCollection
-    {
-        public static Stack<RenderTexture> rdbs = new Stack<RenderTexture>();
-        public static Stack<RenderTexture> usedRdbs;
-
-        public static void StartStacking()
-        {
-            rdbs = new Stack<RenderTexture>();
-        }
-
-        public static void AddToStack(RenderTexture rdb)
-        {
-            //rdbs.Push(rdb);
-            //rdb.DiscardContents();
-        }
-
-        public static void StopStacking()
-        {
-            //usedRdbs = new List<RenderTexture>();
-        }
-
-        public static RenderTexture GetFromStack(Vector2 size)
-        {
-            //if (rdbs.Count > 0)
-            //{
-            //    return rdbs.Pop();
-            //}
-
-            return new RenderTexture((int)size.x, (int)size.y, 16, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
-        }
-    }
-
     #region Enumerations
 
-    ///// <summary>
-    ///// Defines a collection of quality modes.
-    ///// </summary>
-    //public enum QualityMode
-    //{
-    //    Low,
-    //    Medium,
-    //    High,
-    //}
+    /// <summary>
+    /// Defines a collection of quality modes.
+    /// </summary>
+    public enum QualityMode
+    {
+        Low,
+        Medium,
+        High,
+    }
 
     #endregion
 
     /// <summary>
     /// Base class for noise modules.
     /// </summary>
-    [System.Serializable]
-    public class SerializableModuleBase : IDisposable
+    public abstract class ModuleBase : IDisposable
     {
         #region Fields
 
-        [NonSerialized] private SerializableModuleBase[] _modules;
+        private ModuleBase[] _modules;
 
         #endregion
 
@@ -71,11 +37,11 @@ namespace LibNoise
         /// Initializes a new instance of Helpers.
         /// </summary>
         /// <param name="count">The number of source modules.</param>
-        public SerializableModuleBase(int count)
+        protected ModuleBase(int count)
         {
             if (count > 0)
             {
-                _modules = new SerializableModuleBase[count];
+                _modules = new ModuleBase[count];
             }
         }
 
@@ -88,7 +54,7 @@ namespace LibNoise
         /// </summary>
         /// <param name="index">The index of the source module to aquire.</param>
         /// <returns>The requested source module.</returns>
-        public virtual SerializableModuleBase this[int index]
+        public virtual ModuleBase this[int index]
         {
             get
             {
@@ -122,7 +88,7 @@ namespace LibNoise
         #endregion
 
         #region Properties
-        protected SerializableModuleBase[] Modules
+        protected ModuleBase[] Modules
         {
             get { return _modules; }
         }
@@ -137,43 +103,7 @@ namespace LibNoise
 
         #endregion
 
-        #region Methods 
-        public virtual RenderTexture GetSphericalValueGPU(Vector2 size)
-        {
-            return null;
-        }
-
-        protected Texture2D duplicateTexture(Texture2D source)
-        {
-            RenderTexture renderTex = RenderTexture.GetTemporary(
-                        source.width,
-                        source.height,
-                        0,
-                        RenderTextureFormat.Default,
-                        RenderTextureReadWrite.Linear);
-
-            Graphics.Blit(source, renderTex);
-            RenderTexture previous = RenderTexture.active;
-            RenderTexture.active = renderTex;
-            Texture2D readableText = new Texture2D(source.width, source.height);
-            readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
-            readableText.Apply();
-            RenderTexture.active = previous;
-            RenderTexture.ReleaseTemporary(renderTex);
-            return readableText;
-        }
-
-        protected RenderTexture GetImage(Material material, Vector2 size)
-        {
-            RenderTexture rdB = RdbCollection.GetFromStack(size);
-
-            RenderTexture.active = rdB;
-            Graphics.Blit(Texture2D.whiteTexture, rdB, material);
-
-            RdbCollection.AddToStack(rdB);
-
-            return rdB;
-        }
+        #region Methods
 
         /// <summary>
         /// Returns the output value for the given input coordinates.
@@ -182,10 +112,7 @@ namespace LibNoise
         /// <param name="y">The input coordinate on the y-axis.</param>
         /// <param name="z">The input coordinate on the z-axis.</param>
         /// <returns>The resulting output value.</returns>
-        public virtual double GetValue(double x, double y, double z)
-        {
-            return 1;
-        }
+        public abstract double GetValue(double x, double y, double z);
 
         /// <summary>
         /// Returns the output value for the given input coordinates.

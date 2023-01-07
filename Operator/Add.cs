@@ -9,13 +9,8 @@ namespace LibNoise.Operator
     /// </summary>
     public class Add : SerializableModuleBase
     {
-        #region Fields
-
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Combiners/Add");
         private Material _materialGPU;
-
-        #endregion
-
         #region Constructors
 
         /// <summary>

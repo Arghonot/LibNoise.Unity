@@ -8,10 +8,11 @@ namespace LibNoise.Generator
     /// </summary>
     public class Checker : SerializableModuleBase
     {
-        #region Constructors
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/SphericalChecker");
         private Material _materialGPU;
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of Checker.

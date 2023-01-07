@@ -53,13 +53,13 @@ namespace LibNoise.Operator
             return GetImage(_materialGPU, size);
         }
 
-        /// <summary>
-        /// Returns the output value for the given input coordinates.
-        /// </summary>
-        /// <param name="x">The input coordinate on the x-axis.</param>
-        /// <param name="y">The input coordinate on the y-axis.</param>
-        /// <param name="z">The input coordinate on the z-axis.</param>
-        /// <returns>The resulting output value.</returns>
+         /// <summary>
+         /// Returns the output value for the given input coordinates.
+         /// </summary>
+         /// <param name="x">The input coordinate on the x-axis.</param>
+         /// <param name="y">The input coordinate on the y-axis.</param>
+         /// <param name="z">The input coordinate on the z-axis.</param>
+         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
             System.Diagnostics.Debug.Assert(Modules[0] != null);

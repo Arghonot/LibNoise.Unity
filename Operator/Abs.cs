@@ -10,12 +10,8 @@ namespace LibNoise.Operator
     /// </summary>
     public class Abs : SerializableModuleBase
     {
-        #region Fields
-
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Abs");
         [SerializeField] public Material _materialGPU;
-
-        #endregion
 
         #region Constructors
 
@@ -54,7 +50,6 @@ namespace LibNoise.Operator
 
             return GetImage(_materialGPU, size);
         }
-
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>

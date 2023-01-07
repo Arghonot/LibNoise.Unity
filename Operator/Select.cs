@@ -13,7 +13,6 @@ namespace LibNoise.Operator
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Selectors/Select");
         private Material _materialGPU;
-
         private double _fallOff;
         private double _raw;
         private double _min = -1.0;
@@ -158,7 +157,6 @@ namespace LibNoise.Operator
 
             return GetImage(_materialGPU, size);
         }
-
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>

@@ -71,7 +71,7 @@ namespace LibNoise.Operator
             System.Diagnostics.Debug.Assert(Modules[1] != null);
             var a = Modules[0].GetValue(x, y, z);
             var b = Modules[1].GetValue(x, y, z);
-            return Math.Max(a, b);
+            return Math.Min(a, b);
         }
 
         #endregion

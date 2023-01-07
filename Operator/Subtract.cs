@@ -56,7 +56,6 @@ namespace LibNoise.Operator
 
             return GetImage(_materialGPU, size);
         }
-
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>

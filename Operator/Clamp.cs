@@ -10,9 +10,9 @@ namespace LibNoise.Operator
     public class Clamp : SerializableModuleBase
     {
         #region Fields
+
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Clamp");
         private Material _materialGPU;
-
         private double _min = -1.0;
         private double _max = 1.0;
 
@@ -111,12 +111,12 @@ namespace LibNoise.Operator
         }
 
         /// <summary>
-        /// Returns the output value for the given input coordinates.
-        /// </summary>
-        /// <param name="x">The input coordinate on the x-axis.</param>
-        /// <param name="y">The input coordinate on the y-axis.</param>
-        /// <param name="z">The input coordinate on the z-axis.</param>
-        /// <returns>The resulting output value.</returns>
+         /// Returns the output value for the given input coordinates.
+         /// </summary>
+         /// <param name="x">The input coordinate on the x-axis.</param>
+         /// <param name="y">The input coordinate on the y-axis.</param>
+         /// <param name="z">The input coordinate on the z-axis.</param>
+         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
             System.Diagnostics.Debug.Assert(Modules[0] != null);

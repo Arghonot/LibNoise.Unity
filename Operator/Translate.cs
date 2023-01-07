@@ -107,7 +107,6 @@ namespace LibNoise.Operator
 
             return GetImage(_materialGPU, size);
         }
-
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>
@@ -117,7 +116,7 @@ namespace LibNoise.Operator
         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
-            System.Diagnostics.Debug.Assert(Modules[0] != null);
+            UnityEngine.Debug.Assert(Modules[0] != null);
             return Modules[0].GetValue(x + _x, y + _y, z + _z);
         }
 

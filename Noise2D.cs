@@ -1,5 +1,6 @@
 using System;
 using System.Xml.Serialization;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 namespace LibNoise
@@ -250,6 +251,8 @@ namespace LibNoise
                         sample = data[x, y];
                     }
                     result[x, y] = sample;
+
+                    Debug.Log(sample);
                 }
             }
             return result;
@@ -310,7 +313,7 @@ namespace LibNoise
                 for (var y = 0; y < _ucHeight; y++)
                 {
                     float fv;
-                    if (isSeamless)
+                    if (!isSeamless)
                     {
                         fv = (float) GeneratePlanar(xc, zc);
                     }
@@ -392,23 +395,21 @@ namespace LibNoise
             }
         }
 
-        public RenderTexture GenerateSphericalGPU()
-        {
-            return _generator.GetSphericalValueGPU(new Vector2(_width, Height));
-        }
-
         /// <summary>
         /// Generates a spherical projection of a point in the noise map.
         /// </summary>
         /// <param name="lat">The latitude of the point.</param>
         /// <param name="lon">The longitude of the point.</param>
         /// <returns>The corresponding noise map value.</returns>
-        public double GenerateSpherical(double lat, double lon)
+        private double GenerateSpherical(double lat, double lon)
         {
             var r = Math.Cos(Mathf.Deg2Rad * lat);
             return _generator.GetValue(r * Math.Cos(Mathf.Deg2Rad * lon), Math.Sin(Mathf.Deg2Rad * lat),
                 r * Math.Sin(Mathf.Deg2Rad * lon));
         }
+        
+        Vector2 bounds = new Vector2();
+        float distance;
 
         /// <summary>
         /// Generates a spherical projection of the noise map.
@@ -442,12 +443,24 @@ namespace LibNoise
                         y < _height + _ucBorder)
                     {
                         _data[x - _ucBorder, y - _ucBorder] = (float) GenerateSpherical(cla, clo);
-                            // Cropped data
+                        float sample = _data[x - _ucBorder, y - _ucBorder];
+                        // Cropped data
+                        if (sample < bounds.x)
+                        {
+                            bounds = new Vector2(sample, bounds.y);
+                        }
+                        if (sample > bounds.y)
+                        {
+                            bounds = new Vector2(bounds.x, sample);
+                        }
                     }
                     cla += yd;
                 }
                 clo += xd;
             }
+
+            distance = Math.Abs(bounds.x - bounds.y);
+            Debug.Log(bounds);
         }
 
         /// <summary>
@@ -482,7 +495,8 @@ namespace LibNoise
                     {
                         sample = _data[x, y];
                     }
-                    pixels[x + y * _width] = gradient.Evaluate((sample + 1) / 2);
+                    pixels[x + y * _width] = gradient.Evaluate((sample + (distance / 2f)) / distance);
+                    //Debug.Log((sample + (distance / 2f)) / distance);
                 }
             }
             texture.SetPixels(pixels);

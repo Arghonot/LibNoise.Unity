@@ -12,7 +12,6 @@ namespace LibNoise.Generator
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/SphericalCylinder");
         private Material _materialGPU;
-
         private double _frequency = 1.0;
 
         #endregion

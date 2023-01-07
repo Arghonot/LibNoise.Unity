@@ -225,7 +225,7 @@ namespace LibNoise
             var xvp = (fx - ix);
             var yvp = (fy - iy);
             var zvp = (fz - iz);
-            return ((xvg * xvp) + (yvg * yvp) + (zvg * zvp)) * 2.12;
+            return ((xvg * xvp) + (yvg * yvp) + (zvg * zvp)) * 0.5773502692d;// * 2.12;
         }
 
         internal static double InterpolateCubic(double a, double b, double c, double d, double position)

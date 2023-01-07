@@ -10,16 +10,10 @@ namespace LibNoise.Operator
     /// </summary>
     public class Displace : SerializableModuleBase
     {
-        #region Fields
+        #region Constructors
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Transformers/Displace");
         private Material _materialGPU;
-        private float _fallof;
-
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of Displace.
         /// </summary>
@@ -91,6 +85,7 @@ namespace LibNoise.Operator
 
         #region ModuleBase Members
 
+
         /// <summary>
         /// Render this generator using a spherical shader.
         /// </summary>
@@ -108,14 +103,14 @@ namespace LibNoise.Operator
 
             return GetImage(_materialGPU, size);
         }
-
-        /// <summary>
-        /// Returns the output value for the given input coordinates.
-        /// </summary>
-        /// <param name="x">The input coordinate on the x-axis.</param>
-        /// <param name="y">The input coordinate on the y-axis.</param>
-        /// <param name="z">The input coordinate on the z-axis.</param>
-        /// <returns>The resulting output value.</returns>
+         
+         /// <summary>
+         /// Returns the output value for the given input coordinates.
+         /// </summary>
+         /// <param name="x">The input coordinate on the x-axis.</param>
+         /// <param name="y">The input coordinate on the y-axis.</param>
+         /// <param name="z">The input coordinate on the z-axis.</param>
+         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
             System.Diagnostics.Debug.Assert(Modules[0] != null);

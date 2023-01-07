@@ -16,7 +16,6 @@ namespace LibNoise.Operator
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Terrace");
         private Material _materialGPU;
-
         private readonly List<double> _data = new List<double>();
         private bool _inverted;
 
@@ -148,7 +147,6 @@ namespace LibNoise.Operator
 
             return GetImage(_materialGPU, size);
         }
-
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>
@@ -158,6 +156,8 @@ namespace LibNoise.Operator
         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
+            System.Diagnostics.Debug.Assert(Modules[0] != null);
+            System.Diagnostics.Debug.Assert(ControlPointCount >= 2);
             var smv = Modules[0].GetValue(x, y, z);
             int ip;
             for (ip = 0; ip < _data.Count; ip++)
@@ -173,7 +173,6 @@ namespace LibNoise.Operator
             {
                 return _data[i1];
             }
-
             var v0 = _data[i0];
             var v1 = _data[i1];
             var a = (smv - v0) / (v1 - v0);

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
 namespace LibNoise.Operator
 {
@@ -13,7 +14,6 @@ namespace LibNoise.Operator
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Transformers/Rotate");
         private Material _materialGPU;
-
         private double _x;
         private double _x1Matrix;
         private double _x2Matrix;
@@ -91,7 +91,7 @@ namespace LibNoise.Operator
         /// </summary>
         public double Z
         {
-            get { return _z; }
+            get { return _x; }
             set { SetAngles(_x, _y, value); }
         }
 
@@ -157,7 +157,7 @@ namespace LibNoise.Operator
         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
-            Debug.Assert(Modules[0] != null);
+            System.Diagnostics.Debug.Assert(Modules[0] != null);
             var nx = (_x1Matrix * x) + (_y1Matrix * y) + (_z1Matrix * z);
             var ny = (_x2Matrix * x) + (_y2Matrix * y) + (_z2Matrix * z);
             var nz = (_x3Matrix * x) + (_y3Matrix * y) + (_z3Matrix * z);

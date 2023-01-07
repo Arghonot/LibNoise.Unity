@@ -11,7 +11,6 @@ namespace LibNoise.Generator
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/Const");
         private Material _materialGPU;
-
         private double _value;
 
         #endregion
