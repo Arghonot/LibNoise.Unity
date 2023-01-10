@@ -12,7 +12,7 @@ namespace LibNoise.Operator
     {
         #region Fields
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Curve");
-        private Material _materialGPU;
+        public Material _materialGPU;
 
         private Texture2D curve;
         public AnimationCurve mathematicalCurve;
@@ -39,6 +39,7 @@ namespace LibNoise.Operator
             : base(1)
         {
             Modules[0] = input;
+            _materialGPU = new Material(_sphericalGPUShader);
         }
 
         #endregion
@@ -109,27 +110,14 @@ namespace LibNoise.Operator
         public override RenderTexture GetSphericalValueGPU(Vector2 size)
         {
             RenderTexture src = Modules[0].GetSphericalValueGPU(size);
-            Texture2D crv = curve;
 
-            _materialGPU = new Material(_sphericalGPUShader);
-            src.wrapMode = TextureWrapMode.Clamp;
-            src.filterMode = FilterMode.Point;
-            crv.wrapMode = TextureWrapMode.Clamp;
-            crv.filterMode = FilterMode.Point;
-            crv.Apply();
+            UnityEngine.Debug.Log(src.name);
+            UnityEngine.Debug.Log(curve.width + " " + curve.height);
 
             _materialGPU.SetTexture("_MainTex", src);
-            _materialGPU.SetTexture("_Curve", crv);
+            _materialGPU.SetTexture("_Curve", curve);
 
             return GetImage(_materialGPU, size);
-        }
-
-        private void DebugCurvePoints()
-        {
-            for (int i = 0; i < length; i++)
-            {
-
-            }
         }
 
         /// <summary>
@@ -143,30 +131,33 @@ namespace LibNoise.Operator
         {
             Debug.Assert(Modules[0] != null);
             Debug.Assert(ControlPointCount >= 4);
-            var smv = Modules[0].GetValue(x, y, z);
-            int ip;
-            for (ip = 0; ip < _data.Count; ip++)
-            {
-                if (smv < _data[ip].Key)
-                {
-                    break;
-                }
-            }
-            var i0 = Mathf.Clamp(ip - 2, 0, _data.Count - 1);
-            var i1 = Mathf.Clamp(ip - 1, 0, _data.Count - 1);
-            var i2 = Mathf.Clamp(ip, 0, _data.Count - 1);
-            var i3 = Mathf.Clamp(ip + 1, 0, _data.Count - 1);
-            if (i1 == i2)
-            {
-                return _data[i1].Value;
-            }
-            //double ip0 = _data[i1].Value;
-            //double ip1 = _data[i2].Value;
-            var ip0 = _data[i1].Key;
-            var ip1 = _data[i2].Key;
-            var a = (smv - ip0) / (ip1 - ip0);
-            return Utils.InterpolateCubic(_data[i0].Value, _data[i1].Value, _data[i2].Value,
-                _data[i3].Value, a);
+            double val = Modules[0].GetValue(x, y, z);
+
+            return mathematicalCurve.Evaluate((float)val);
+            //var smv = Modules[0].GetValue(x, y, z);
+            //int ip;
+            //for (ip = 0; ip < _data.Count; ip++)
+            //{
+            //    if (smv < _data[ip].Key)
+            //    {
+            //        break;
+            //    }
+            //}
+            //var i0 = Mathf.Clamp(ip - 2, 0, _data.Count - 1);
+            //var i1 = Mathf.Clamp(ip - 1, 0, _data.Count - 1);
+            //var i2 = Mathf.Clamp(ip, 0, _data.Count - 1);
+            //var i3 = Mathf.Clamp(ip + 1, 0, _data.Count - 1);
+            //if (i1 == i2)
+            //{
+            //    return _data[i1].Value;
+            //}
+            ////double ip0 = _data[i1].Value;
+            ////double ip1 = _data[i2].Value;
+            //var ip0 = _data[i1].Key;
+            //var ip1 = _data[i2].Key;
+            //var a = (smv - ip0) / (ip1 - ip0);
+            //return Utils.InterpolateCubic(_data[i0].Value, _data[i1].Value, _data[i2].Value,
+            //    _data[i3].Value, a);
         }
 
         #endregion

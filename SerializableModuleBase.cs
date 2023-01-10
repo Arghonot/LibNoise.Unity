@@ -140,7 +140,7 @@ namespace LibNoise
         #region Methods 
         public virtual RenderTexture GetSphericalValueGPU(Vector2 size)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         protected Texture2D duplicateTexture(Texture2D source)

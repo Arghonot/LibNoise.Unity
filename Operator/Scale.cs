@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using UnityEngine;
 
 namespace LibNoise.Operator
 {
@@ -47,6 +48,7 @@ namespace LibNoise.Operator
         public Scale(double x, double y, double z, SerializableModuleBase input)
             : base(1)
         {
+            UnityEngine.Debug.Log(input.GetType());
             Modules[0] = input;
             X = x;
             Y = y;
@@ -88,6 +90,14 @@ namespace LibNoise.Operator
 
         #region ModuleBase Members
 
+        public override RenderTexture GetSphericalValueGPU(Vector2 size)
+        {
+            //  TODO implement this module, will need a kind of positionning system through all the generators to make it relevant.
+            UnityEngine.Debug.Log("Scale.GetSphericalValueGPU");
+            UnityEngine.Debug.Log(Modules[0].GetType());
+            return Modules[0].GetSphericalValueGPU(size);
+        }
+
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>
@@ -97,7 +107,7 @@ namespace LibNoise.Operator
         /// <returns>The resulting output value.</returns>
         public override double GetValue(double x, double y, double z)
         {
-            Debug.Assert(Modules[0] != null);
+            System.Diagnostics.Debug.Assert(Modules[0] != null);
             return Modules[0].GetValue(x * _x, y * _y, z * _z);
         }
 
