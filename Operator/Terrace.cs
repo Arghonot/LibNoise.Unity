@@ -132,6 +132,7 @@ namespace LibNoise.Operator
 
         public void GenerateAnimationCurve()
         {
+            _data.Sort();
             Keyframe[] ks = new Keyframe[_data.Count];
 
             for (int i = 0; i < _data.Count; i++)
