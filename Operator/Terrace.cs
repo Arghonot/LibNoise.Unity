@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using Xnoise;
 using Debug = System.Diagnostics.Debug;
@@ -15,9 +16,10 @@ namespace LibNoise.Operator
         #region Fields
 
         private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Terrace");
-        private Material _materialGPU;
+        public Material _materialGPU;
         private readonly List<double> _data = new List<double>();
         private bool _inverted;
+        public AnimationCurve curve;
 
         #endregion
 
@@ -51,6 +53,7 @@ namespace LibNoise.Operator
         {
             Modules[0] = input;
             IsInverted = inverted;
+            _materialGPU = new Material(_sphericalGPUShader);
         }
 
         #endregion
@@ -127,6 +130,18 @@ namespace LibNoise.Operator
             }
         }
 
+        public void GenerateAnimationCurve()
+        {
+            Keyframe[] ks = new Keyframe[_data.Count];
+
+            for (int i = 0; i < _data.Count; i++)
+            {
+                ks[i] = new Keyframe(1 * (float)_data[i], 1 * (float)_data[i], 5f, 0f);
+            }
+
+            curve = new AnimationCurve(ks);
+        }
+
         #endregion
 
         #region ModuleBase Members
@@ -138,12 +153,12 @@ namespace LibNoise.Operator
         /// <returns>The generated image.</returns>
         public override RenderTexture GetSphericalValueGPU(Vector2 size)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
             RenderTexture src = Modules[0].GetSphericalValueGPU(size);
+            GenerateAnimationCurve();
 
             _materialGPU.SetTexture("_MainTex", src);
             _materialGPU.SetTexture("_Terrace",
-                UtilsFunctions.GetTerracePointListAsTexture(_data));
+                UtilsFunctions.GetCurveAsTexture(curve));
 
             return GetImage(_materialGPU, size);
         }
@@ -158,33 +173,37 @@ namespace LibNoise.Operator
         {
             System.Diagnostics.Debug.Assert(Modules[0] != null);
             System.Diagnostics.Debug.Assert(ControlPointCount >= 2);
+
+            GenerateAnimationCurve();
             var smv = Modules[0].GetValue(x, y, z);
-            int ip;
-            for (ip = 0; ip < _data.Count; ip++)
-            {
-                if (smv < _data[ip])
-                {
-                    break;
-                }
-            }
-            var i0 = Mathf.Clamp(ip - 1, 0, _data.Count - 1);
-            var i1 = Mathf.Clamp(ip, 0, _data.Count - 1);
-            if (i0 == i1)
-            {
-                return _data[i1];
-            }
-            var v0 = _data[i0];
-            var v1 = _data[i1];
-            var a = (smv - v0) / (v1 - v0);
-            if (_inverted)
-            {
-                a = 1.0 - a;
-                var t = v0;
-                v0 = v1;
-                v1 = t;
-            }
-            a *= a;
-            return Utils.InterpolateLinear(v0, v1, a);
+
+            return curve.Evaluate((float)smv);
+            //int ip;
+            //for (ip = 0; ip < _data.Count; ip++)
+            //{
+            //    if (smv < _data[ip])
+            //    {
+            //        break;
+            //    }
+            //}
+            //var i0 = Mathf.Clamp(ip - 1, 0, _data.Count - 1);
+            //var i1 = Mathf.Clamp(ip, 0, _data.Count - 1);
+            //if (i0 == i1)
+            //{
+            //    return _data[i1];
+            //}
+            //var v0 = _data[i0];
+            //var v1 = _data[i1];
+            //var a = (smv - v0) / (v1 - v0);
+            //if (_inverted)
+            //{
+            //    a = 1.0 - a;
+            //    var t = v0;
+            //    v0 = v1;
+            //    v1 = t;
+            //}
+            //a *= a;
+            //return Utils.InterpolateLinear(v0, v1, a);
         }
 
         #endregion
