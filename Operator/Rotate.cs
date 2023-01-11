@@ -140,14 +140,21 @@ namespace LibNoise.Operator
         /// <param name="projection"></param>
         public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            //_materialGPU = new Material(_sphericalGPUShader);
 
-            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, Vector3.zero, projection));
-            _materialGPU.SetFloat("_X", (float)X);
-            _materialGPU.SetFloat("_Y", (float)Y);
-            _materialGPU.SetFloat("_Z", (float)Z);
+            //_materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, Vector3.zero, projection));
+            //_materialGPU.SetFloat("_X", (float)X);
+            //_materialGPU.SetFloat("_Y", (float)Y);
+            //_materialGPU.SetFloat("_Z", (float)Z);
 
-            return GetImage(_materialGPU, size);
+            //return GetImage(_materialGPU, size);
+            var nx = (_x1Matrix * origin.x) + (_y1Matrix * origin.y) + (_z1Matrix * origin.z);
+            var ny = (_x2Matrix * origin.x) + (_y2Matrix * origin.y) + (_z2Matrix * origin.z);
+            var nz = (_x3Matrix * origin.x) + (_y3Matrix * origin.y) + (_z3Matrix * origin.z);
+            Vector3 translatedOrigin = new Vector3((float)nx, (float)ny, (float)nz);
+
+            return Modules[0].GetValueGPU(size, area, translatedOrigin, projection);
+
         }
 
         /// <summary>

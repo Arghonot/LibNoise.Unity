@@ -92,10 +92,13 @@ namespace LibNoise.Operator
 
         public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
-            //  TODO implement this module, will need a kind of positionning system through all the generators to make it relevant.
-            UnityEngine.Debug.Log("Scale.GetSphericalValueGPU");
-            UnityEngine.Debug.Log(Modules[0].GetType());
-            return Modules[0].GetValueGPU(size, area, Vector3.zero, projection);
+            Vector3 translatedOrigin = new Vector3(origin.x * (float)_x, origin.y * (float)_y, origin.z * (float)_z);
+
+            return Modules[0].GetValueGPU(size, area, translatedOrigin, projection);
+
+            //UnityEngine.Debug.Log("Scale.GetSphericalValueGPU");
+            //UnityEngine.Debug.Log(Modules[0].GetType());
+            //return Modules[0].GetValueGPU(size, area, Vector3.zero, projection);
         }
 
         /// <summary>

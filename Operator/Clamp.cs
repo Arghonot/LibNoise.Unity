@@ -105,7 +105,7 @@ namespace LibNoise.Operator
         {
             _materialGPU = new Material(_sphericalGPUShader);
 
-            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, Vector3.zero, projection));
+            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, origin, projection));
             _materialGPU.SetFloat("_Minimum", (float)_min);
             _materialGPU.SetFloat("_Maximum", (float)_max);
 

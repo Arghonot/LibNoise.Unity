@@ -162,10 +162,10 @@ namespace LibNoise.Operator
         {
             _materialGPU = new Material(_sphericalGPUShader);
 
-            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, Vector3.zero, projection));
-            _materialGPU.SetTexture("_PerlinA", new Perlin().GetValueGPU(size, area, Vector3.zero, projection));
-            _materialGPU.SetTexture("_PerlinB", new Perlin().GetValueGPU(size, area, Vector3.zero, projection));
-            _materialGPU.SetTexture("_PerlinC", new Perlin().GetValueGPU(size, area, Vector3.zero, projection));
+            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, origin, projection));
+            _materialGPU.SetTexture("_PerlinA", new Perlin().GetValueGPU(size, area, origin, projection));
+            _materialGPU.SetTexture("_PerlinB", new Perlin().GetValueGPU(size, area, origin, projection));
+            _materialGPU.SetTexture("_PerlinC", new Perlin().GetValueGPU(size, area, origin, projection));
             _materialGPU.SetFloat("_Power", (float)Power);
 
             return GetImage(_materialGPU, size);

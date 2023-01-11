@@ -152,9 +152,9 @@ namespace LibNoise.Operator
         {
             _materialGPU = new Material(_sphericalGPUShader);
 
-            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, Vector3.zero, projection));
-            _materialGPU.SetTexture("_TextureB", Modules[1].GetValueGPU(size, area, Vector3.zero, projection));
-            _materialGPU.SetTexture("_TextureC", Modules[2].GetValueGPU(size, area, Vector3.zero, projection));
+            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, origin, projection));
+            _materialGPU.SetTexture("_TextureB", Modules[1].GetValueGPU(size, area, origin, projection));
+            _materialGPU.SetTexture("_TextureC", Modules[2].GetValueGPU(size, area, origin, projection));
             _materialGPU.SetFloat("_FallOff", (float)FallOff);
 
             return GetImage(_materialGPU, size);

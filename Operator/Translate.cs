@@ -100,14 +100,18 @@ namespace LibNoise.Operator
         /// <param name="projection"></param>
         public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            //_materialGPU = new Material(_sphericalGPUShader);
 
-            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, Vector3.zero, projection));
-            _materialGPU.SetFloat("_X", (float)X);
-            _materialGPU.SetFloat("_Y", (float)Y);
-            _materialGPU.SetFloat("_Z", (float)Z);
+            Vector3 translatedOrigin = new Vector3(origin.x + (float)_x, origin.y + (float)_y, origin.z + (float)_z);
 
-            return GetImage(_materialGPU, size);
+            return Modules[0].GetValueGPU(size, area, translatedOrigin, projection);
+
+            //_materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, , projection));
+            //_materialGPU.SetFloat("_X", (float)X);
+            //_materialGPU.SetFloat("_Y", (float)Y);
+            //_materialGPU.SetFloat("_Z", (float)Z);
+
+            //return GetImage(_materialGPU, size);
         }
         /// <summary>
         /// Returns the output value for the given input coordinates.

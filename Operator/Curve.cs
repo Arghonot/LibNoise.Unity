@@ -111,7 +111,7 @@ namespace LibNoise.Operator
         /// <param name="projection"></param>
         public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
-            RenderTexture src = Modules[0].GetValueGPU(size, area, Vector3.zero, projection);
+            RenderTexture src = Modules[0].GetValueGPU(size, area, origin, projection);
 
             UnityEngine.Debug.Log(src.name);
             UnityEngine.Debug.Log(curve.width + " " + curve.height);
