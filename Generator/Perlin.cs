@@ -120,7 +120,6 @@ namespace LibNoise.Generator
         #endregion
 
         #region ModuleBase Members
-
         /// <summary>
         /// Render this generator using a spherical shader.
         /// </summary>
@@ -132,11 +131,12 @@ namespace LibNoise.Generator
         {
             _materialGPU = new Material(Shader.Find(GetCorrespondingShader(projection)));
 
+            _materialGPU.SetVector("_OffsetPosition", origin);
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
             _materialGPU.SetFloat("_Lacunarity", (float)_lacunarity);
             _materialGPU.SetFloat("_Persistence", (float)_persistence);
             _materialGPU.SetFloat("_Octaves", _octaveCount);
-            _materialGPU.SetVector("_OffsetPosition", new Vector4(_seed, _seed, _seed, _seed));
+            _materialGPU.SetFloat("_Seed", _seed);
 
             return GetImage(_materialGPU, size);
         }

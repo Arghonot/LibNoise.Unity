@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace LibNoise
 {
@@ -506,6 +508,7 @@ namespace LibNoise
 
         private void GenerateSphericalGPU(double south, double north, double west, double east)
         {
+            Debug.Log("GenerateSphericalGPU");
             // set texture here
             renderedTexture = _generator.GetValueGPU(new Vector2(Width, Height), RenderingAreaData.standardSpherical, origin, ProjectionType.Spherical);
         }
@@ -556,15 +559,24 @@ namespace LibNoise
             if (useGPU)
             {
                 RenderTexture.active = renderedTexture;
+
                 var tex = new Texture2D(renderedTexture.width, renderedTexture.height);
                 tex.ReadPixels(new Rect(0, 0, renderedTexture.width, renderedTexture.height), 0, 0);
                 tex.Apply();
+
                 return tex;
             }
             else
             {
                 return GetTexture(GradientPresets.Grayscale);
             }
+        }
+
+        public RenderTexture getTexture()
+        {
+            RenderTexture.active = renderedTexture;
+
+            return renderedTexture;
         }
         /// <summary>
         /// Creates a texture map for the current content of the noise map.

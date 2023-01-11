@@ -175,8 +175,9 @@ namespace LibNoise.Generator
 
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
             _materialGPU.SetFloat("_Lacunarity", (float)_lacunarity);
+            _materialGPU.SetFloat("_Seed", (float)_seed);
             _materialGPU.SetFloat("_Octaves", _octaveCount);
-            _materialGPU.SetVector("_OffsetPosition", new Vector4(_seed, _seed, _seed, _seed));
+            _materialGPU.SetVector("_OffsetPosition", origin);
 
             return GetImage(_materialGPU, size);
         }

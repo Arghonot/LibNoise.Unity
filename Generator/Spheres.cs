@@ -65,7 +65,7 @@ namespace LibNoise.Generator
             _materialGPU = new Material(_sphericalGPUShader);
 
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
-            _materialGPU.SetVector("_OffsetPosition", new Vector4(1f, 0f, 0f, 0f));
+            _materialGPU.SetVector("_OffsetPosition", origin);
 
             return GetImage(_materialGPU, size);
         }

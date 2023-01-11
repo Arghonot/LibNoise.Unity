@@ -123,6 +123,7 @@ namespace LibNoise
 
         #region Properties
 
+        // TODO possible performance bottleneck here, perhaps with a static dictionnary somewhere instead ?
         protected virtual string GetPlanarShaderName() => throw new NotImplementedException();
         protected virtual string GetSphericalShaderName() => throw new NotImplementedException();
         protected virtual string GetCylindricalShaderName() => throw new NotImplementedException();
