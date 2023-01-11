@@ -10,7 +10,6 @@ namespace LibNoise.Generator
     {
         #region Fields
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/SphericalBillow");
         private Material _materialGPU;
         private double _frequency = 1.0;
         private double _lacunarity = 2.0;
@@ -55,6 +54,9 @@ namespace LibNoise.Generator
         #endregion
 
         #region Properties
+        protected override string GetPlanarShaderName() => "Xnoise/Generators/BillowPlanar";
+        protected override string GetSphericalShaderName() => "Xnoise/Generators/BillowSpherical";
+        protected override string GetCylindricalShaderName() => throw new NotImplementedException();
 
         /// <summary>
         /// Gets or sets the frequency of the first octave.
@@ -127,7 +129,7 @@ namespace LibNoise.Generator
         /// <param name="projection"></param>
         public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = new Material(Shader.Find(GetCorrespondingShader(projection)));
 
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
             _materialGPU.SetFloat("_Lacunarity", (float)_lacunarity);

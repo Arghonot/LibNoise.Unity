@@ -105,23 +105,22 @@ namespace LibNoise.Operator
         /// <param name="projection"></param>
         public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
-            float thisX = getValue(area, origin, 1, projection);
-            float thisY = getValue(area, origin, 2, projection);
-            float thisZ = getValue(area, origin, 3, projection);
-            var dx = origin.x + thisX;
-            var dy = origin.y + thisY;
-            var dz = origin.z + thisZ;
+            //float thisX = getValue(area, origin, 1, projection);
+            //float thisY = getValue(area, origin, 2, projection);
+            //float thisZ = getValue(area, origin, 3, projection);
+            //var dx = origin.x + thisX;
+            //var dy = origin.y + thisY;
+            //var dz = origin.z + thisZ;
 
-            UnityEngine.Debug.Log(thisX);
-            UnityEngine.Debug.Log(thisY);
-            UnityEngine.Debug.Log(thisZ);
+            //UnityEngine.Debug.Log(thisX);
+            //UnityEngine.Debug.Log(thisY);
+            //UnityEngine.Debug.Log(thisZ);
 
 
-            return Modules[0].GetValueGPU(size, area, new Vector3(dx, dy, dz), projection);
+            //return Modules[0].GetValueGPU(size, area, new Vector3(dx, dy, dz), projection);
             _materialGPU = new Material(_sphericalGPUShader);
 
             //TODO fix this so it works just like the CPU version
-            // ideally the same with a get pixel ? for x y and z ?
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, origin, projection));
             _materialGPU.SetTexture("_TextureB", Modules[1].GetValueGPU(size, area, origin, projection));
             _materialGPU.SetTexture("_TextureC", Modules[2].GetValueGPU(size, area, origin, projection));

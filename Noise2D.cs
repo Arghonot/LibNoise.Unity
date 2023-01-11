@@ -559,7 +559,6 @@ namespace LibNoise
             if (useGPU)
             {
                 RenderTexture.active = renderedTexture;
-
                 var tex = new Texture2D(renderedTexture.width, renderedTexture.height);
                 tex.ReadPixels(new Rect(0, 0, renderedTexture.width, renderedTexture.height), 0, 0);
                 tex.Apply();

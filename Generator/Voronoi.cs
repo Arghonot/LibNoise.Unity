@@ -10,7 +10,6 @@ namespace LibNoise.Generator
     {
         #region Fields
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/SphericalVoronoi");
         private Material _materialGPU;
         private double _displacement = 1.0;
         private double _frequency = 1.0;
@@ -48,6 +47,10 @@ namespace LibNoise.Generator
         #endregion
 
         #region Properties
+
+        protected override string GetPlanarShaderName() => "Xnoise/Generators/VoronoiPlanar";
+        protected override string GetSphericalShaderName() => "Xnoise/Generators/VoronoiSpherical";
+        protected override string GetCylindricalShaderName() => throw new NotImplementedException();
 
         /// <summary>
         /// Gets or sets the displacement value of the Voronoi cells.
@@ -98,7 +101,7 @@ namespace LibNoise.Generator
         /// <param name="projection"></param>
         public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = new Material(Shader.Find(GetCorrespondingShader(projection)));
 
             _materialGPU.SetVector("_OffsetPosition", origin);
             _materialGPU.SetFloat("_Displacement", (float)_displacement);

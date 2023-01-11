@@ -54,8 +54,9 @@ namespace LibNoise.Generator
         #endregion
 
         #region Properties
-        protected override string GetPlanarShaderName() => throw new NotImplementedException();
-        protected override string GetSphericalShaderName() => "Xnoise/Generators/SphericalPerlin";
+
+        protected override string GetPlanarShaderName() => "Xnoise/Generators/PerlinPlanar";
+        protected override string GetSphericalShaderName() => "Xnoise/Generators/PerlinSpherical";
         protected override string GetCylindricalShaderName() => throw new NotImplementedException();
 
         /// <summary>
