@@ -64,12 +64,12 @@ namespace LibNoise.Operator
         /// <param name="y">The input coordinate on the y-axis.</param>
         /// <param name="z">The input coordinate on the z-axis.</param>
         /// <returns>The resulting output value.</returns>
-        public override double GetValue(double x, double y, double z)
+        public override double GetValueCPU(double x, double y, double z)
         {
             Debug.Assert(Modules[0] != null);
             if (!(_cached && _x == x && _y == y && _z == z))
             {
-                _value = Modules[0].GetValue(x, y, z);
+                _value = Modules[0].GetValueCPU(x, y, z);
                 _x = x;
                 _y = y;
                 _z = z;

@@ -122,6 +122,11 @@ namespace LibNoise
         #endregion
 
         #region Properties
+
+        protected virtual string GetPlanarShaderName() => throw new NotImplementedException();
+        protected virtual string GetSphericalShaderName() => throw new NotImplementedException();
+        protected virtual string GetCylindricalShaderName() => throw new NotImplementedException();
+
         protected SerializableModuleBase[] Modules
         {
             get { return _modules; }
@@ -138,7 +143,23 @@ namespace LibNoise
         #endregion
 
         #region Methods 
-        public virtual RenderTexture GetSphericalValueGPU(Vector2 size)
+
+        protected string GetCorrespondingShader(ProjectionType projection)
+        {
+            switch (projection)
+            {
+                case ProjectionType.Flat:
+                    return GetPlanarShaderName();
+                case ProjectionType.Spherical:
+                    return GetSphericalShaderName();
+                case ProjectionType.Cylindrical:
+                    return GetCylindricalShaderName();
+                default:
+                    return GetPlanarShaderName();
+            }
+        }
+
+        public virtual RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
             throw new NotImplementedException();
         }
@@ -182,7 +203,7 @@ namespace LibNoise
         /// <param name="y">The input coordinate on the y-axis.</param>
         /// <param name="z">The input coordinate on the z-axis.</param>
         /// <returns>The resulting output value.</returns>
-        public virtual double GetValue(double x, double y, double z)
+        public virtual double GetValueCPU(double x, double y, double z)
         {
             return 1;
         }
@@ -192,9 +213,9 @@ namespace LibNoise
         /// </summary>
         /// <param name="coordinate">The input coordinate.</param>
         /// <returns>The resulting output value.</returns>
-        public double GetValue(Vector3 coordinate)
+        public double GetValueCPU(Vector3 coordinate)
         {
-            return GetValue(coordinate.x, coordinate.y, coordinate.z);
+            return GetValueCPU(coordinate.x, coordinate.y, coordinate.z);
         }
 
         /// <summary>
@@ -204,7 +225,7 @@ namespace LibNoise
         /// <returns>The resulting output value.</returns>
         public double GetValue(ref Vector3 coordinate)
         {
-            return GetValue(coordinate.x, coordinate.y, coordinate.z);
+            return GetValueCPU(coordinate.x, coordinate.y, coordinate.z);
         }
 
         #endregion

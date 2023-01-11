@@ -17,7 +17,7 @@ namespace LibNoise
             _materialGPU = new Material(_sphericalGPUShader);
         }
 
-        public override RenderTexture GetSphericalValueGPU(Vector2 size)
+        public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
             UnityEngine.Debug.Log("Image spherical value");
             _materialGPU.SetTexture("_TextureA", input);
@@ -25,7 +25,7 @@ namespace LibNoise
             return GetImage(_materialGPU, size);
         }
 
-        public override double GetValue(double x, double y, double z)
+        public override double GetValueCPU(double x, double y, double z)
         {
             Vector2 lnlat = CoordinatesProjector.GetLnLatFromPosition(new Vector3((float)x, (float)y, (float)z));
             Vector2 uvs = new Vector2((lnlat.x + 180f) / 360f, (lnlat.y + 90f) / 180f);

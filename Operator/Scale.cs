@@ -90,12 +90,12 @@ namespace LibNoise.Operator
 
         #region ModuleBase Members
 
-        public override RenderTexture GetSphericalValueGPU(Vector2 size)
+        public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
         {
             //  TODO implement this module, will need a kind of positionning system through all the generators to make it relevant.
             UnityEngine.Debug.Log("Scale.GetSphericalValueGPU");
             UnityEngine.Debug.Log(Modules[0].GetType());
-            return Modules[0].GetSphericalValueGPU(size);
+            return Modules[0].GetValueGPU(size, area, Vector3.zero, projection);
         }
 
         /// <summary>
@@ -105,10 +105,10 @@ namespace LibNoise.Operator
         /// <param name="y">The input coordinate on the y-axis.</param>
         /// <param name="z">The input coordinate on the z-axis.</param>
         /// <returns>The resulting output value.</returns>
-        public override double GetValue(double x, double y, double z)
+        public override double GetValueCPU(double x, double y, double z)
         {
             System.Diagnostics.Debug.Assert(Modules[0] != null);
-            return Modules[0].GetValue(x * _x, y * _y, z * _z);
+            return Modules[0].GetValueCPU(x * _x, y * _y, z * _z);
         }
 
         #endregion

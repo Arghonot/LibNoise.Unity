@@ -1,10 +1,37 @@
 using System;
 using System.Xml.Serialization;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 namespace LibNoise
 {
+    public enum ProjectionType
+    {
+        Flat,
+        Spherical,
+        Cylindrical
+    }
+
+    public struct RenderingAreaData
+    {
+        public double left;
+        public double right;
+        public double top;
+        public double bottom;
+
+        public RenderingAreaData(double a, double b, double c, double d)
+        {
+            left = a;
+            right = b;
+            top = c;
+            bottom = d;
+        }
+
+        public static readonly RenderingAreaData standardSpherical = new RenderingAreaData(Noise2D.West, Noise2D.East, Noise2D.North, Noise2D.South);
+        public static readonly RenderingAreaData standardCartesian = new RenderingAreaData(Noise2D.Left, Noise2D.Right, Noise2D.North, Noise2D.South);
+    }
+
     /// <summary>
     /// Provides a two-dimensional noise map.
     /// </summary>
@@ -29,7 +56,9 @@ namespace LibNoise
         #endregion
 
         #region Fields
-
+        public bool useGPU = false;
+        public Vector3 origin;
+        private RenderTexture renderedTexture;
         private int _width;
         private int _height;
         private float[,] _data;
@@ -281,7 +310,7 @@ namespace LibNoise
         /// <returns>The corresponding noise map value.</returns>
         private double GeneratePlanar(double x, double y)
         {
-            return _generator.GetValue(x, 0.0, y);
+            return _generator.GetValueCPU(x, 0.0, y);
         }
 
         /// <summary>
@@ -302,10 +331,28 @@ namespace LibNoise
             {
                 throw new ArgumentNullException("Generator is null");
             }
+            if (!useGPU)
+            {
+                GeneratePlanarCPU(left, right, top, bottom, isSeamless);
+            }
+            else
+            {
+                GeneratePlanarGPU(left, right, top, bottom, isSeamless);
+            }
+        }
+
+        private void GeneratePlanarGPU(double left, double right, double top, double bottom, bool isSeamless = true)
+        {
+            // set texture here
+            throw new NotImplementedException();
+        }
+
+        private void GeneratePlanarCPU(double left, double right, double top, double bottom, bool isSeamless = true)
+        {
             var xe = right - left;
             var ze = bottom - top;
-            var xd = xe / ((double) _width - _ucBorder);
-            var zd = ze / ((double) _height - _ucBorder);
+            var xd = xe / ((double)_width - _ucBorder);
+            var zd = ze / ((double)_height - _ucBorder);
             var xc = left;
             for (var x = 0; x < _ucWidth; x++)
             {
@@ -315,7 +362,7 @@ namespace LibNoise
                     float fv;
                     if (!isSeamless)
                     {
-                        fv = (float) GeneratePlanar(xc, zc);
+                        fv = (float)GeneratePlanar(xc, zc);
                     }
                     else
                     {
@@ -327,7 +374,7 @@ namespace LibNoise
                         var zb = 1.0 - ((zc - top) / ze);
                         var z0 = Utils.InterpolateLinear(swv, sev, xb);
                         var z1 = Utils.InterpolateLinear(nwv, nev, xb);
-                        fv = (float) Utils.InterpolateLinear(z0, z1, zb);
+                        fv = (float)Utils.InterpolateLinear(z0, z1, zb);
                     }
                     _ucData[x, y] = fv;
                     if (x >= _ucBorder && y >= _ucBorder && x < _width + _ucBorder &&
@@ -352,7 +399,7 @@ namespace LibNoise
             var x = Math.Cos(angle * Mathf.Deg2Rad);
             var y = height;
             var z = Math.Sin(angle * Mathf.Deg2Rad);
-            return _generator.GetValue(x, y, z);
+            return _generator.GetValueCPU(x, y, z);
         }
 
         /// <summary>
@@ -372,22 +419,40 @@ namespace LibNoise
             {
                 throw new ArgumentNullException("Generator is null");
             }
+            if (!useGPU)
+            {
+                GenerateCylindricalCPU(angleMin, angleMax, heightMin, heightMax);
+            }
+            else 
+            { 
+                GenerateCylindricalGPU(); 
+            }
+        }
+
+        private void GenerateCylindricalGPU()
+        {
+            // set texture here
+            throw new NotImplementedException();
+        }
+
+        private void GenerateCylindricalCPU(double angleMin, double angleMax, double heightMin, double heightMax)
+        {
             var ae = angleMax - angleMin;
             var he = heightMax - heightMin;
-            var xd = ae / ((double) _width - _ucBorder);
-            var yd = he / ((double) _height - _ucBorder);
+            var xd = ae / ((double)_width - _ucBorder);
+            var yd = he / ((double)_height - _ucBorder);
             var ca = angleMin;
             for (var x = 0; x < _ucWidth; x++)
             {
                 var ch = heightMin;
                 for (var y = 0; y < _ucHeight; y++)
                 {
-                    _ucData[x, y] = (float) GenerateCylindrical(ca, ch);
+                    _ucData[x, y] = (float)GenerateCylindrical(ca, ch);
                     if (x >= _ucBorder && y >= _ucBorder && x < _width + _ucBorder &&
                         y < _height + _ucBorder)
                     {
-                        _data[x - _ucBorder, y - _ucBorder] = (float) GenerateCylindrical(ca, ch);
-                            // Cropped data
+                        _data[x - _ucBorder, y - _ucBorder] = (float)GenerateCylindrical(ca, ch);
+                        // Cropped data
                     }
                     ch += yd;
                 }
@@ -404,7 +469,7 @@ namespace LibNoise
         private double GenerateSpherical(double lat, double lon)
         {
             var r = Math.Cos(Mathf.Deg2Rad * lat);
-            return _generator.GetValue(r * Math.Cos(Mathf.Deg2Rad * lon), Math.Sin(Mathf.Deg2Rad * lat),
+            return _generator.GetValueCPU(r * Math.Cos(Mathf.Deg2Rad * lon), Math.Sin(Mathf.Deg2Rad * lat),
                 r * Math.Sin(Mathf.Deg2Rad * lon));
         }
         
@@ -428,21 +493,40 @@ namespace LibNoise
             {
                 throw new ArgumentNullException("Generator is null");
             }
+            if (!useGPU)
+            {
+                GenerateSphericalCPU(south, north, west, east);
+            }
+            else
+            {
+                GenerateSphericalGPU(south, north, west, east);
+            }
+        }
+
+
+        private void GenerateSphericalGPU(double south, double north, double west, double east)
+        {
+            // set texture here
+            renderedTexture = _generator.GetValueGPU(new Vector2(Width, Height), RenderingAreaData.standardSpherical, origin, ProjectionType.Spherical);
+        }
+
+        private void GenerateSphericalCPU(double south, double north, double west, double east)
+        {
             var loe = east - west;
             var lae = north - south;
-            var xd = loe / ((double) _width - _ucBorder);
-            var yd = lae / ((double) _height - _ucBorder);
+            var xd = loe / ((double)_width - _ucBorder);
+            var yd = lae / ((double)_height - _ucBorder);
             var clo = west;
             for (var x = 0; x < _ucWidth; x++)
             {
                 var cla = south;
                 for (var y = 0; y < _ucHeight; y++)
                 {
-                    _ucData[x, y] = (float) GenerateSpherical(cla, clo);
+                    _ucData[x, y] = (float)GenerateSpherical(cla, clo);
                     if (x >= _ucBorder && y >= _ucBorder && x < _width + _ucBorder &&
                         y < _height + _ucBorder)
                     {
-                        _data[x - _ucBorder, y - _ucBorder] = (float) GenerateSpherical(cla, clo);
+                        _data[x - _ucBorder, y - _ucBorder] = (float)GenerateSpherical(cla, clo);
                         float sample = _data[x - _ucBorder, y - _ucBorder];
                         // Cropped data
                         if (sample < bounds.x)
@@ -469,9 +553,19 @@ namespace LibNoise
         /// <returns>The created texture map.</returns>
         public Texture2D GetTexture()
         {
-            return GetTexture(GradientPresets.Grayscale);
+            if (useGPU)
+            {
+                RenderTexture.active = renderedTexture;
+                var tex = new Texture2D(renderedTexture.width, renderedTexture.height);
+                tex.ReadPixels(new Rect(0, 0, renderedTexture.width, renderedTexture.height), 0, 0);
+                tex.Apply();
+                return tex;
+            }
+            else
+            {
+                return GetTexture(GradientPresets.Grayscale);
+            }
         }
-
         /// <summary>
         /// Creates a texture map for the current content of the noise map.
         /// </summary>
