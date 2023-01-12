@@ -68,6 +68,7 @@ namespace LibNoise.Generator
             _materialGPU.SetFloat("_Radius", 1f);
             _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
             _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
+            _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
 
             return GetImage(_materialGPU, renderingDatas.size);
         }

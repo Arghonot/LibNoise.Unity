@@ -106,34 +106,14 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-
-            // TODO have the node generate a displacement map
-            //each pixel rgb = xyz of a displacement on the sampling
-            //float thisX = getValue(area, origin, 1, projection);
-            //float thisY = getValue(area, origin, 2, projection);
-            //float thisZ = getValue(area, origin, 3, projection);
-            //var dx = origin.x + thisX;
-            //var dy = origin.y + thisY;
-            //var dz = origin.z + thisZ;
-
-            //UnityEngine.Debug.Log(thisX);
-            //UnityEngine.Debug.Log(thisY);
-            //UnityEngine.Debug.Log(thisZ);
-
-
-            //return Modules[0].GetValueGPU(size, area, new Vector3(dx, dy, dz), projection);
             _materialGPU = new Material(_sphericalGPUShader);
 
-            //TODO fix this so it works just like the CPU version
             _materialGPU.SetTexture("_TextureA", Modules[1].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureB", Modules[2].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureC", Modules[3].GetValueGPU(renderingDatas));
-            //_materialGPU.SetTexture("_Control", Modules[0].GetValueGPU(renderingDatas));
-            //_materialGPU.SetFloat("_FallOff", 1f);
 
             var tmpDisplacementMap = renderingDatas.displacementMap;
             renderingDatas.displacementMap = GetImage(_materialGPU, renderingDatas.size);
-            SaveRenderTexture(renderingDatas.displacementMap);
             var render = Modules[0].GetValueGPU(renderingDatas);
             renderingDatas.displacementMap = tmpDisplacementMap;
 
