@@ -17,12 +17,12 @@ namespace LibNoise
             _materialGPU = new Material(_sphericalGPUShader);
         }
 
-        public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
+        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
             UnityEngine.Debug.Log("Image spherical value");
             _materialGPU.SetTexture("_TextureA", input);
 
-            return GetImage(_materialGPU, size);
+            return GetImage(_materialGPU, renderingDatas.size);
         }
 
         public override double GetValueCPU(double x, double y, double z)

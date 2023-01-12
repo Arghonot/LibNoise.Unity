@@ -90,11 +90,11 @@ namespace LibNoise.Operator
 
         #region ModuleBase Members
 
-        public override RenderTexture GetValueGPU(Vector2 size, RenderingAreaData area, Vector3 origin, ProjectionType projection = ProjectionType.Flat)
+        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            Vector3 translatedOrigin = new Vector3(origin.x * (float)_x, origin.y * (float)_y, origin.z * (float)_z);
+            Vector3 translatedOrigin = new Vector3(renderingDatas.origin.x * (float)_x, renderingDatas.origin.y * (float)_y, renderingDatas.origin.z * (float)_z);
 
-            return Modules[0].GetValueGPU(size, area, translatedOrigin, projection);
+            return Modules[0].GetValueGPU(renderingDatas);
 
             //UnityEngine.Debug.Log("Scale.GetSphericalValueGPU");
             //UnityEngine.Debug.Log(Modules[0].GetType());

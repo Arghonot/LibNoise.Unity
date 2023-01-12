@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Xml.Serialization;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace LibNoise
 {
@@ -32,6 +30,53 @@ namespace LibNoise
 
         public static readonly RenderingAreaData standardSpherical = new RenderingAreaData(Noise2D.West, Noise2D.East, Noise2D.North, Noise2D.South);
         public static readonly RenderingAreaData standardCartesian = new RenderingAreaData(Noise2D.Left, Noise2D.Right, Noise2D.North, Noise2D.South);
+    }
+
+    /// <summary>
+    /// Class contening all the datas necessary for a GPU rendering.
+    /// Aim at allowing the GPU to operate with as much flexibility than CPU.
+    /// </summary>
+    public class GPURenderingDatas
+    {
+        public Vector3 origin;
+        public Vector3 rotation;
+        public Texture2D displacementMap;// could be a rendertexture ultimately
+        public Vector4 quaternionRotation 
+        { 
+            get
+            {
+                Quaternion quat = Quaternion.Euler(rotation);
+                Vector4 v4 = new Vector4(quat.x, quat.y, quat.z, quat.w);
+                return v4;
+            } 
+        }
+        public RenderingAreaData area { get { return _area; } }
+        public ProjectionType projection { get { return _projection; } }
+        public Vector2 size { get { return _size; } }
+
+        private RenderingAreaData _area;
+        private ProjectionType _projection;
+        private Vector2 _size;
+        private Vector4 _quaternionRotation;
+
+        private void GetBlackTexture()
+        {
+            displacementMap = new Texture2D((int)_size.x, (int)size.y);
+            UnityEngine.Color[] pixels = Enumerable.Repeat(UnityEngine.Color.black, displacementMap.width * displacementMap.height).ToArray();
+            displacementMap.SetPixels(pixels);
+            displacementMap.Apply();
+        }
+
+        public GPURenderingDatas(Vector2 finalTextureSize, ProjectionType type, RenderingAreaData area)
+        {
+            this._area = area;
+            this._projection = type;
+            this._size = finalTextureSize;
+            this.origin = Vector3.one;
+            this.rotation = Vector3.zero;
+            _quaternionRotation = new Vector4(0, 0, 0, 1);
+            GetBlackTexture();
+        }
     }
 
     /// <summary>
@@ -509,8 +554,12 @@ namespace LibNoise
         private void GenerateSphericalGPU(double south, double north, double west, double east)
         {
             Debug.Log("GenerateSphericalGPU");
+
+            GPURenderingDatas datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Spherical, RenderingAreaData.standardSpherical);
+
+            //datas.origin = origin;
             // set texture here
-            renderedTexture = _generator.GetValueGPU(new Vector2(Width, Height), RenderingAreaData.standardSpherical, origin, ProjectionType.Spherical);
+            renderedTexture = _generator.GetValueGPU(datas);
         }
 
         private void GenerateSphericalCPU(double south, double north, double west, double east)
@@ -585,7 +634,7 @@ namespace LibNoise
         public Texture2D GetTexture(Gradient gradient)
         {
             var texture = new Texture2D(_width, _height);
-            var pixels = new Color[_width * _height];
+            var pixels = new UnityEngine.Color[_width * _height];
             for (var x = 0; x < _width; x++)
             {
                 for (var y = 0; y < _height; y++)
@@ -618,7 +667,7 @@ namespace LibNoise
         public Texture2D GetNormalMap(float intensity)
         {
             var texture = new Texture2D(_width, _height);
-            var pixels = new Color[_width * _height];
+            var pixels = new UnityEngine.Color[_width * _height];
             for (var x = 0; x < _ucWidth; x++)
             {
                 for (var y = 0; y < _ucHeight; y++)
@@ -641,7 +690,7 @@ namespace LibNoise
                     if (x >= _ucBorder && y >= _ucBorder && x < _width + _ucBorder &&
                         y < _height + _ucBorder)
                     {
-                        pixels[(x - _ucBorder) + (y - _ucBorder) * _width] = new Color(colorVector.x,
+                        pixels[(x - _ucBorder) + (y - _ucBorder) * _width] = new UnityEngine.Color(colorVector.x,
                             colorVector.y, colorVector.z);
                     }
                 }
