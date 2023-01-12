@@ -40,7 +40,7 @@ namespace LibNoise
     {
         public Vector3 origin;
         public Vector3 rotation;
-        public Texture2D displacementMap;// could be a rendertexture ultimately
+        public RenderTexture displacementMap;// could be a rendertexture ultimately
         public Vector4 quaternionRotation 
         { 
             get
@@ -61,10 +61,12 @@ namespace LibNoise
 
         private void GetBlackTexture()
         {
-            displacementMap = new Texture2D((int)_size.x, (int)size.y);
-            UnityEngine.Color[] pixels = Enumerable.Repeat(UnityEngine.Color.black, displacementMap.width * displacementMap.height).ToArray();
-            displacementMap.SetPixels(pixels);
-            displacementMap.Apply();
+            RenderTexture rdB = new RenderTexture((int)size.x, (int)size.y, 16, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
+            Graphics.Blit(Texture2D.blackTexture, rdB);
+            //displacementMap = new Texture2D((int)_size.x, (int)size.y);
+            //UnityEngine.Color[] pixels = Enumerable.Repeat(UnityEngine.Color.black, displacementMap.width * displacementMap.height).ToArray();
+            //displacementMap.SetPixels(pixels);
+            //displacementMap.Apply();
         }
 
         public GPURenderingDatas(Vector2 finalTextureSize, ProjectionType type, RenderingAreaData area)

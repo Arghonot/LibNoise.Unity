@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using UnityEngine;
 
 namespace LibNoise.Operator
@@ -124,13 +125,30 @@ namespace LibNoise.Operator
             _materialGPU = new Material(_sphericalGPUShader);
 
             //TODO fix this so it works just like the CPU version
-            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
-            _materialGPU.SetTexture("_TextureB", Modules[1].GetValueGPU(renderingDatas));
-            _materialGPU.SetTexture("_TextureC", Modules[2].GetValueGPU(renderingDatas));
-            _materialGPU.SetTexture("_Control", Modules[2].GetValueGPU(renderingDatas));
-            _materialGPU.SetFloat("_FallOff", 1f);
+            _materialGPU.SetTexture("_TextureA", Modules[1].GetValueGPU(renderingDatas));
+            _materialGPU.SetTexture("_TextureB", Modules[2].GetValueGPU(renderingDatas));
+            _materialGPU.SetTexture("_TextureC", Modules[3].GetValueGPU(renderingDatas));
+            //_materialGPU.SetTexture("_Control", Modules[0].GetValueGPU(renderingDatas));
+            //_materialGPU.SetFloat("_FallOff", 1f);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            var tmpDisplacementMap = renderingDatas.displacementMap;
+            renderingDatas.displacementMap = GetImage(_materialGPU, renderingDatas.size);
+            SaveRenderTexture(renderingDatas.displacementMap);
+            var render = Modules[0].GetValueGPU(renderingDatas);
+            renderingDatas.displacementMap = tmpDisplacementMap;
+
+            return render;
+        }
+
+        private void SaveRenderTexture(RenderTexture renderedTexture)
+        {
+            var tex = new Texture2D(renderedTexture.width, renderedTexture.height);
+            tex.ReadPixels(new Rect(0, 0, renderedTexture.width, renderedTexture.height), 0, 0);
+            tex.Apply();
+
+            UnityEngine.Debug.Log(Application.dataPath + "/" + "DisplacementMap" + ".png");
+
+            File.WriteAllBytes(Application.dataPath + "/" + "DisplacementMap" + ".png", tex.EncodeToPNG());
         }
          
          /// <summary>

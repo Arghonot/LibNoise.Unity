@@ -138,6 +138,7 @@ namespace LibNoise.Generator
             _materialGPU.SetFloat("_Lacunarity", (float)_lacunarity);
             _materialGPU.SetFloat("_Persistence", (float)_persistence);
             _materialGPU.SetFloat("_Octaves", _octaveCount);
+            _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
             _materialGPU.SetFloat("_Seed", _seed);
 
             return GetImage(_materialGPU, renderingDatas.size);
