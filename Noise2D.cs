@@ -393,7 +393,11 @@ namespace LibNoise
         private void GeneratePlanarGPU(double left, double right, double top, double bottom, bool isSeamless = true)
         {
             // set texture here
-            throw new NotImplementedException();
+            GPURenderingDatas datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Flat, RenderingAreaData.standardCartesian);
+
+            //datas.origin = origin;
+            // set texture here
+            renderedTexture = _generator.GetValueGPU(datas);
         }
 
         private void GeneratePlanarCPU(double left, double right, double top, double bottom, bool isSeamless = true)
