@@ -11,7 +11,7 @@ namespace LibNoise.Operator
     public class Curve : SerializableModuleBase
     {
         #region Fields
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Curve");
+        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifier/Curve");
         public Material _materialGPU;
 
         private Texture2D curve;
@@ -113,11 +113,13 @@ namespace LibNoise.Operator
         {
             RenderTexture src = Modules[0].GetValueGPU(renderingDatas);
 
-            UnityEngine.Debug.Log(src.name);
-            UnityEngine.Debug.Log(curve.width + " " + curve.height);
+            if (curve == null)
+            {
+                curve = UtilsFunctions.GetCurveAsTexture(mathematicalCurve);
+            }
 
-            _materialGPU.SetTexture("_MainTex", src);
-            _materialGPU.SetTexture("_Curve", curve);
+            _materialGPU.SetTexture("_Src", src);
+            _materialGPU.SetTexture("_Gradient", curve);
 
             return GetImage(_materialGPU, renderingDatas.size);
         }

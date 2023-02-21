@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using Xnoise;
@@ -159,12 +160,20 @@ namespace LibNoise.Operator
             RenderTexture src = Modules[0].GetValueGPU(renderingDatas);
             GenerateAnimationCurve();
 
-            _materialGPU.SetTexture("_MainTex", src);
-            _materialGPU.SetTexture("_Terrace",
+            _materialGPU.SetTexture("_Src", src);
+            _materialGPU.SetTexture("_Gradient",
                 UtilsFunctions.GetCurveAsTexture(curve));
-
+            //SaveRenderTexture(UtilsFunctions.GetCurveAsTexture(curve));
             return GetImage(_materialGPU, renderingDatas.size);
         }
+
+        private void SaveRenderTexture(Texture2D tex)
+        {
+            UnityEngine.Debug.Log(Application.dataPath + "/" + "TerraceGradient" + ".png");
+
+            File.WriteAllBytes(Application.dataPath + "/" + "TerraceGradient" + ".png", tex.EncodeToPNG());
+        }
+
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>
