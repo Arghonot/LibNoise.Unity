@@ -185,12 +185,12 @@ namespace LibNoise
             return readableText;
         }
 
-        protected RenderTexture GetImage(Material material, Vector2 size)
+        protected RenderTexture GetImage(Material material, Vector2 size, int pass = 0)
         {
             RenderTexture rdB = RdbCollection.GetFromStack(size);
 
             RenderTexture.active = rdB;
-            Graphics.Blit(Texture2D.whiteTexture, rdB, material);
+            Graphics.Blit(Texture2D.whiteTexture, rdB, material, pass);
 
             RdbCollection.AddToStack(rdB);
 

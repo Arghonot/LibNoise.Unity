@@ -55,9 +55,10 @@ namespace LibNoise.Generator
 
         #region Properties
 
-        protected override string GetPlanarShaderName() => "Xnoise/Generators/PerlinPlanar";
-        protected override string GetSphericalShaderName() => "Xnoise/Generators/PerlinSpherical";
-        protected override string GetCylindricalShaderName() => throw new NotImplementedException();
+        // TODO cache me with the other shaders in a material cache class.
+        protected override string GetPlanarShaderName() => "Xnoise/Generators/PerlinMultiCoord";
+        protected override string GetSphericalShaderName() => "Xnoise/Generators/PerlinMultiCoord";
+        protected override string GetCylindricalShaderName() => "Xnoise/Generators/PerlinMultiCoord";
 
         /// <summary>
         /// Gets or sets the frequency of the first octave.
@@ -141,7 +142,7 @@ namespace LibNoise.Generator
             _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
             _materialGPU.SetFloat("_Seed", _seed);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas.size, (int)renderingDatas.projection);
         }
 
         /// <summary>
