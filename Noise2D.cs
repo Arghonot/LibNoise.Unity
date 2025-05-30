@@ -30,6 +30,7 @@ namespace LibNoise
 
         public static readonly RenderingAreaData standardSpherical = new RenderingAreaData(Noise2D.West, Noise2D.East, Noise2D.North, Noise2D.South);
         public static readonly RenderingAreaData standardCartesian = new RenderingAreaData(Noise2D.Left, Noise2D.Right, Noise2D.North, Noise2D.South);
+        public static readonly RenderingAreaData standardCylindrical = new RenderingAreaData(Noise2D.AngleMin, Noise2D.AngleMax, Noise2D.Top, Noise2D.Bottom);
     }
 
     /// <summary>
@@ -484,8 +485,8 @@ namespace LibNoise
 
         private void GenerateCylindricalGPU()
         {
-            // set texture here
-            throw new NotImplementedException();
+            GPURenderingDatas datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Cylindrical, RenderingAreaData.standardCylindrical);
+            renderedTexture = _generator.GetValueGPU(datas);
         }
 
         private void GenerateCylindricalCPU(double angleMin, double angleMax, double heightMin, double heightMax)
