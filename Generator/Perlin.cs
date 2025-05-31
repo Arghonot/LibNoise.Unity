@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Generator
 {
@@ -131,7 +132,7 @@ namespace LibNoise.Generator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(Shader.Find(GetCorrespondingShader(renderingDatas.projection)));
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Perlin);
 
             _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
             _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);

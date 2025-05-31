@@ -13,7 +13,7 @@ namespace LibNoise
         Cylindrical
     }
 
-    public struct RenderingAreaData
+    public struct RenderingAreaData // what ? a helper for rendering areas/coordinates ?
     {
         public double left;
         public double right;
@@ -483,7 +483,8 @@ namespace LibNoise
             }
         }
 
-        private void GenerateCylindricalGPU()
+        // TODO keep the complex pipeline with all these functions just for a different type of projection ? A switch case would surely be more efficient
+        private void GenerateCylindricalGPU() 
         {
             GPURenderingDatas datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Cylindrical, RenderingAreaData.standardCylindrical);
             renderedTexture = _generator.GetValueGPU(datas);
