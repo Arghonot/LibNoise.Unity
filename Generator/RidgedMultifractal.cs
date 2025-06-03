@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Generator
 {
@@ -55,10 +56,6 @@ namespace LibNoise.Generator
         #endregion
 
         #region Properties
-
-        protected override string GetPlanarShaderName() => "Xnoise/Generators/RidgedMultifractalPlanar";
-        protected override string GetSphericalShaderName() => "Xnoise/Generators/RidgedMultifractalSpherical";
-        protected override string GetCylindricalShaderName() => throw new NotImplementedException();
 
         /// <summary>
         /// Gets or sets the frequency of the first octave.
@@ -174,7 +171,7 @@ namespace LibNoise.Generator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(Shader.Find(GetCorrespondingShader(renderingDatas.projection)));
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.RidgedMultifractal);
 
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
             _materialGPU.SetFloat("_Lacunarity", (float)_lacunarity);
@@ -184,7 +181,7 @@ namespace LibNoise.Generator
             _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
             _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas.size, (int)renderingDatas.projection);
         }
 
          /// <summary>

@@ -49,10 +49,6 @@ namespace LibNoise.Generator
 
         #region Properties
 
-        protected override string GetPlanarShaderName() => "Xnoise/Generators/VoronoiPlanar";
-        protected override string GetSphericalShaderName() => "Xnoise/Generators/VoronoiSpherical";
-        protected override string GetCylindricalShaderName() => throw new NotImplementedException();
-
         /// <summary>
         /// Gets or sets the displacement value of the Voronoi cells.
         /// </summary>

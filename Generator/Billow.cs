@@ -55,9 +55,6 @@ namespace LibNoise.Generator
         #endregion
 
         #region Properties
-        protected override string GetPlanarShaderName() => "Xnoise/Generators/BillowPlanar";
-        protected override string GetSphericalShaderName() => "Xnoise/Generators/BillowSpherical";
-        protected override string GetCylindricalShaderName() => throw new NotImplementedException();
 
         /// <summary>
         /// Gets or sets the frequency of the first octave.

@@ -56,11 +56,6 @@ namespace LibNoise.Generator
 
         #region Properties
 
-        // TODO cache me with the other shaders in a material cache class.
-        protected override string GetPlanarShaderName() => "Xnoise/Generators/PerlinMultiCoord";
-        protected override string GetSphericalShaderName() => "Xnoise/Generators/PerlinMultiCoord";
-        protected override string GetCylindricalShaderName() => "Xnoise/Generators/PerlinMultiCoord";
-
         /// <summary>
         /// Gets or sets the frequency of the first octave.
         /// <para>Frequency represents the number of cycles per unit length that a generation module outputs.</para>

@@ -123,11 +123,6 @@ namespace LibNoise
 
         #region Properties
 
-        // TODO possible performance bottleneck here, perhaps with a static dictionnary somewhere instead ?
-        protected virtual string GetPlanarShaderName() => throw new NotImplementedException();
-        protected virtual string GetSphericalShaderName() => throw new NotImplementedException();
-        protected virtual string GetCylindricalShaderName() => throw new NotImplementedException();
-
         protected SerializableModuleBase[] Modules
         {
             get { return _modules; }
@@ -144,22 +139,6 @@ namespace LibNoise
         #endregion
 
         #region Methods 
-
-        // TODO remove me once new shader architecture is complete
-        protected string GetCorrespondingShader(ProjectionType projection)
-        {
-            switch (projection)
-            {
-                case ProjectionType.Flat:
-                    return GetPlanarShaderName();
-                case ProjectionType.Spherical:
-                    return GetSphericalShaderName();
-                case ProjectionType.Cylindrical:
-                    return GetCylindricalShaderName();
-                default:
-                    return GetPlanarShaderName();
-            }
-        }
 
         public virtual RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
