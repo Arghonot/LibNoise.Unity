@@ -40,8 +40,9 @@ namespace LibNoise
     public class GPURenderingDatas
     {
         public Vector3 origin;
+        public Vector3 scale;
         public Vector3 rotation;
-        public RenderTexture displacementMap;// could be a rendertexture ultimately
+        public RenderTexture displacementMap;
         public Vector4 quaternionRotation 
         { 
             get
@@ -58,7 +59,6 @@ namespace LibNoise
         private RenderingAreaData _area;
         private ProjectionType _projection;
         private Vector2 _size;
-        private Vector4 _quaternionRotation;
 
         private void GetBlackTexture()
         {
@@ -77,7 +77,6 @@ namespace LibNoise
             this._size = finalTextureSize;
             this.origin = Vector3.one;
             this.rotation = Vector3.zero;
-            _quaternionRotation = new Vector4(0, 0, 0, 1);
             GetBlackTexture();
         }
     }

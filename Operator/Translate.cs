@@ -98,7 +98,6 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Translate);
             Vector3 tmpOrigin = renderingDatas.origin;
 
             renderingDatas.origin = new Vector3(renderingDatas.origin.x + (float)_x, renderingDatas.origin.y + (float)_y, renderingDatas.origin.z + (float)_z);
