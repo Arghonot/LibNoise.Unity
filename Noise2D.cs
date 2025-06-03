@@ -39,8 +39,8 @@ namespace LibNoise
     /// </summary>
     public class GPURenderingDatas
     {
-        public Vector3 origin;
-        public Vector3 scale;
+        public Vector3 origin = Vector3.zero;
+        public Vector3 scale = Vector3.one;
         public Vector3 rotation;
         public RenderTexture displacementMap;
         public Vector4 quaternionRotation 
@@ -48,8 +48,7 @@ namespace LibNoise
             get
             {
                 Quaternion quat = Quaternion.Euler(rotation);
-                Vector4 v4 = new Vector4(quat.x, quat.y, quat.z, quat.w);
-                return v4;
+                return new Vector4(quat.x, quat.y, quat.z, quat.w);
             } 
         }
         public RenderingAreaData area { get { return _area; } }

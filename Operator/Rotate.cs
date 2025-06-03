@@ -136,16 +136,14 @@ namespace LibNoise.Operator
         /// <returns>The generated image.</returns>
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            //var nx = (_x1Matrix * renderingDatas.origin.x) + (_y1Matrix * renderingDatas.origin.y) + (_z1Matrix * renderingDatas.origin.z);
-            //var ny = (_x2Matrix * renderingDatas.origin.x) + (_y2Matrix * renderingDatas.origin.y) + (_z2Matrix * renderingDatas.origin.z);
-            //var nz = (_x3Matrix * renderingDatas.origin.x) + (_y3Matrix * renderingDatas.origin.y) + (_z3Matrix * renderingDatas.origin.z);
-            //Vector3 newRotation = new Vector3((float)nx * Mathf.Rad2Deg, (float)ny * Mathf.Rad2Deg, (float)nz * Mathf.Rad2Deg);
-            //Vector3 tmpRotation = renderingDatas.rotation;
+            Vector3 tmpRotation = renderingDatas.rotation;
 
-            //renderingDatas.rotation = newRotation;
-            //var output = Modules[0].GetValueGPU(renderingDatas);
-            //renderingDatas.rotation = tmpRotation;
-            //return output;
+            renderingDatas.rotation = new Vector3(renderingDatas.rotation.x + (float)_x, renderingDatas.rotation.y + (float)_y, renderingDatas.rotation.z + (float)_z);
+
+            var input = Modules[0].GetValueGPU(renderingDatas);
+
+            renderingDatas.rotation = tmpRotation;
+            return input;
         }
 
         /// <summary>
