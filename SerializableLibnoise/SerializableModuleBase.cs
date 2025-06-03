@@ -145,6 +145,7 @@ namespace LibNoise
 
         #region Methods 
 
+        // TODO remove me once new shader architecture is complete
         protected string GetCorrespondingShader(ProjectionType projection)
         {
             switch (projection)

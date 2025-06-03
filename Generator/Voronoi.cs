@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Generator
 {
@@ -101,7 +102,7 @@ namespace LibNoise.Generator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(Shader.Find(GetCorrespondingShader(renderingDatas.projection)));
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Voronoi);
 
             _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
             _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
@@ -110,8 +111,9 @@ namespace LibNoise.Generator
             _materialGPU.SetInt("_Distance", _distance ? 2 : 0);
             _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
             _materialGPU.SetInt("_Seed", _seed);
+            _materialGPU.SetFloat("_Radius", 1f);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas.size, (int)renderingDatas.projection);
         }
 
          /// <summary>
