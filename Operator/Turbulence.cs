@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using LibNoise.Generator;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Operator
 {
@@ -10,13 +11,6 @@ namespace LibNoise.Operator
     /// </summary>
     public class Turbulence : SerializableModuleBase
     {
-        #region Fields
-
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Transformers/Turbulence");
-        private Material _materialGPU;
-
-        #endregion
-
         #region Constants
 
         private const double X0 = (12414.0 / 65536.0);
@@ -160,7 +154,7 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Turbulence);
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_PerlinA", new Perlin().GetValueGPU(renderingDatas));
@@ -168,7 +162,7 @@ namespace LibNoise.Operator
             _materialGPU.SetTexture("_PerlinC", new Perlin().GetValueGPU(renderingDatas));
             _materialGPU.SetFloat("_Power", (float)Power);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas);
         }
         /// <summary>
         /// Returns the output value for the given input coordinates.

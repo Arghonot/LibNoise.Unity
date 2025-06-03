@@ -12,8 +12,6 @@ namespace LibNoise.Operator
     {
         #region Fields
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Transformers/Rotate");
-        private Material _materialGPU;
         private double _x;
         private double _x1Matrix;
         private double _x2Matrix;

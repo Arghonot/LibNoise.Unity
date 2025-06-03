@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Operator
 {
@@ -11,8 +12,6 @@ namespace LibNoise.Operator
     {
         #region Fields
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Selectors/Select");
-        private Material _materialGPU;
         private double _fallOff;
         private double _raw;
         private double _min = -1.0;
@@ -146,19 +145,18 @@ namespace LibNoise.Operator
         /// </summary>
         /// <param name="renderingDatas"></param>
         /// <returns>The generated image.</returns>
-        /// 
-        /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Select);
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureB", Modules[1].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureC", Modules[2].GetValueGPU(renderingDatas));
             _materialGPU.SetFloat("_FallOff", (float)FallOff);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas);
         }
+
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>

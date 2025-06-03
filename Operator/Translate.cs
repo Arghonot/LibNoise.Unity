@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Operator
 {
@@ -10,9 +11,6 @@ namespace LibNoise.Operator
     public class Translate : SerializableModuleBase
     {
         #region Fields
-
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Transformers/Rotate");
-        private Material _materialGPU;
 
         private double _x = 1.0;
         private double _y = 1.0;
@@ -100,7 +98,7 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            //_materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Translate);
             Vector3 tmpOrigin = renderingDatas.origin;
 
             renderingDatas.origin = new Vector3(renderingDatas.origin.x + (float)_x, renderingDatas.origin.y + (float)_y, renderingDatas.origin.z + (float)_z);

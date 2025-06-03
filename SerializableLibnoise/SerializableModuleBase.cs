@@ -61,6 +61,7 @@ namespace LibNoise
     {
         #region Fields
 
+        protected Material _materialGPU;
         [NonSerialized] private SerializableModuleBase[] _modules;
 
         #endregion
@@ -165,12 +166,12 @@ namespace LibNoise
             return readableText;
         }
 
-        protected RenderTexture GetImage(Material material, Vector2 size, int pass = 0)
+        protected RenderTexture GetImage(Material material, GPURenderingDatas renderingDatas)
         {
-            RenderTexture rdB = RdbCollection.GetFromStack(size);
+            RenderTexture rdB = RdbCollection.GetFromStack(renderingDatas.size);
 
             RenderTexture.active = rdB;
-            Graphics.Blit(Texture2D.whiteTexture, rdB, material, pass);
+            Graphics.Blit(Texture2D.whiteTexture, rdB, material, (int)renderingDatas.projection);
 
             RdbCollection.AddToStack(rdB);
 

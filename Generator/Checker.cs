@@ -9,9 +9,6 @@ namespace LibNoise.Generator
     /// </summary>
     public class Checker : SerializableModuleBase
     {
-
-        private Material _materialGPU;
-
         #region Constructors
 
         /// <summary>
@@ -41,7 +38,7 @@ namespace LibNoise.Generator
             _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
             _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
 
-            return GetImage(_materialGPU, renderingDatas.size, (int)renderingDatas.projection);
+            return GetImage(_materialGPU, renderingDatas);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Operator
 {
@@ -9,13 +10,6 @@ namespace LibNoise.Operator
     /// </summary>
     public class ScaleBias : SerializableModuleBase
     {
-        #region Fields
-
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/ScaleBias");
-        private Material _materialGPU;
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
@@ -78,13 +72,13 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.ScaleBias);
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
             _materialGPU.SetFloat("_Bias", (float)Bias);
             _materialGPU.SetFloat("_Scale", (float)Scale);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas);
         }
 
         /// <summary>

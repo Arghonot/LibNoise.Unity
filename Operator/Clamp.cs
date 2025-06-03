@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Operator
 {
@@ -11,8 +12,6 @@ namespace LibNoise.Operator
     {
         #region Fields
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Clamp");
-        private Material _materialGPU;
         private double _min = -1.0;
         private double _max = 1.0;
 
@@ -103,13 +102,13 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Clamp);
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
             _materialGPU.SetFloat("_Minimum", (float)_min);
             _materialGPU.SetFloat("_Maximum", (float)_max);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas);
         }
 
         /// <summary>

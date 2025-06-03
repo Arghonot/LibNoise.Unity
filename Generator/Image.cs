@@ -1,28 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static XNode.Node;
+using Xnoise;
 
 namespace LibNoise
 {
     public class Image : SerializableModuleBase
     {
         public Texture2D input;
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/ReadImage");
-        public Material _materialGPU;
         public RenderTexture rdb;
 
-        public Image(int count) : base(count)
-        {
-            _materialGPU = new Material(_sphericalGPUShader);
-        }
+        public Image(int count) : base(count) { }
 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            UnityEngine.Debug.Log("Image spherical value");
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.ReadImage);
             _materialGPU.SetTexture("_TextureA", input);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas);
         }
 
         public override double GetValueCPU(double x, double y, double z)

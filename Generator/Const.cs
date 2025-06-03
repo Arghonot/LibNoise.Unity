@@ -10,7 +10,6 @@ namespace LibNoise.Generator
     {
         #region Fields
 
-        private Material _materialGPU;
         private double _value;
 
         #endregion
@@ -65,7 +64,7 @@ namespace LibNoise.Generator
 
             _materialGPU.SetFloat("_Const", (float)_value);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas);
         }
 
         /// <summary>

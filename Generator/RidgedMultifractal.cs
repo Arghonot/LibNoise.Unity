@@ -11,7 +11,6 @@ namespace LibNoise.Generator
     {
         #region Fields
 
-        private Material _materialGPU;
         private double _frequency = 1.0;
         private double _lacunarity = 2.0;
         private QualityMode _quality = QualityMode.Medium;
@@ -181,7 +180,7 @@ namespace LibNoise.Generator
             _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
             _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
 
-            return GetImage(_materialGPU, renderingDatas.size, (int)renderingDatas.projection);
+            return GetImage(_materialGPU, renderingDatas);
         }
 
          /// <summary>

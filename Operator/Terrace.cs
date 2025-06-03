@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 using Xnoise;
-using Debug = System.Diagnostics.Debug;
 
 namespace LibNoise.Operator
 {
@@ -16,8 +14,6 @@ namespace LibNoise.Operator
     {
         #region Fields
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Terrace");
-        public Material _materialGPU;
         private readonly List<double> _data = new List<double>();
         private bool _inverted;
         public AnimationCurve curve;
@@ -54,7 +50,6 @@ namespace LibNoise.Operator
         {
             Modules[0] = input;
             IsInverted = inverted;
-            _materialGPU = new Material(_sphericalGPUShader);
         }
 
         #endregion
@@ -157,14 +152,14 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Terrace);
             RenderTexture src = Modules[0].GetValueGPU(renderingDatas);
             GenerateAnimationCurve();
 
             _materialGPU.SetTexture("_Src", src);
-            _materialGPU.SetTexture("_Gradient",
-                UtilsFunctions.GetCurveAsTexture(curve));
-            //SaveRenderTexture(UtilsFunctions.GetCurveAsTexture(curve));
-            return GetImage(_materialGPU, renderingDatas.size);
+            _materialGPU.SetTexture("_Gradient", UtilsFunctions.GetCurveAsTexture(curve));
+
+            return GetImage(_materialGPU, renderingDatas);
         }
 
         private void SaveRenderTexture(Texture2D tex)

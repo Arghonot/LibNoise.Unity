@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Operator
 {
@@ -8,13 +8,6 @@ namespace LibNoise.Operator
     /// </summary>
     public class Invert : SerializableModuleBase
     {
-        #region Fields
-
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Invert");
-        private Material _materialGPU;
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
@@ -48,11 +41,11 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Invert);
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas);
         }
 
          /// <summary>

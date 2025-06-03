@@ -11,7 +11,6 @@ namespace LibNoise.Generator
     {
         #region Fields
 
-        private Material _materialGPU;
         private double _frequency = 1.0;
 
         #endregion
@@ -67,7 +66,7 @@ namespace LibNoise.Generator
             _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
             _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
 
-            return GetImage(_materialGPU, renderingDatas.size,(int)renderingDatas.projection);
+            return GetImage(_materialGPU, renderingDatas);
         }
         /// <summary>
         /// Returns the output value for the given input coordinates.

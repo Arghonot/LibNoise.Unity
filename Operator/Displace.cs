@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Operator
 {
@@ -13,8 +14,6 @@ namespace LibNoise.Operator
     {
         #region Constructors
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Transformers/Displace");
-        private Material _materialGPU;
         /// <summary>
         /// Initializes a new instance of Displace.
         /// </summary>
@@ -106,14 +105,14 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Displace);
 
             _materialGPU.SetTexture("_TextureA", Modules[1].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureB", Modules[2].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureC", Modules[3].GetValueGPU(renderingDatas));
 
             var tmpDisplacementMap = renderingDatas.displacementMap;
-            renderingDatas.displacementMap = GetImage(_materialGPU, renderingDatas.size);
+            renderingDatas.displacementMap = GetImage(_materialGPU, renderingDatas);
             var render = Modules[0].GetValueGPU(renderingDatas);
             renderingDatas.displacementMap = tmpDisplacementMap;
 

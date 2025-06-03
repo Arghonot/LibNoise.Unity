@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Operator
 {
@@ -10,9 +11,6 @@ namespace LibNoise.Operator
     /// </summary>
     public class Abs : SerializableModuleBase
     {
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifiers/Abs");
-        [SerializeField] public Material _materialGPU;
-
         #region Constructors
 
         /// <summary>
@@ -46,11 +44,11 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Abs);
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas);
         }
         /// <summary>
         /// Returns the output value for the given input coordinates.

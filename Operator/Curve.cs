@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Xnoise;
 using Debug = System.Diagnostics.Debug;
 
 namespace LibNoise.Operator
@@ -11,8 +12,6 @@ namespace LibNoise.Operator
     public class Curve : SerializableModuleBase
     {
         #region Fields
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Modifier/Curve");
-        public Material _materialGPU;
 
         private Texture2D curve;
         public AnimationCurve mathematicalCurve;
@@ -39,7 +38,6 @@ namespace LibNoise.Operator
             : base(1)
         {
             Modules[0] = input;
-            _materialGPU = new Material(_sphericalGPUShader);
         }
 
         #endregion
@@ -111,6 +109,7 @@ namespace LibNoise.Operator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Curve);
             RenderTexture src = Modules[0].GetValueGPU(renderingDatas);
 
             if (curve == null)
@@ -121,7 +120,7 @@ namespace LibNoise.Operator
             _materialGPU.SetTexture("_Src", src);
             _materialGPU.SetTexture("_Gradient", curve);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas);
         }
 
         /// <summary>

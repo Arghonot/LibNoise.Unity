@@ -11,7 +11,6 @@ namespace LibNoise.Generator
     {
         #region Fields
 
-        private Material _materialGPU;
         private double _displacement = 1.0;
         private double _frequency = 1.0;
         private int _seed;
@@ -109,7 +108,7 @@ namespace LibNoise.Generator
             _materialGPU.SetInt("_Seed", _seed);
             _materialGPU.SetFloat("_Radius", 1f);
 
-            return GetImage(_materialGPU, renderingDatas.size, (int)renderingDatas.projection);
+            return GetImage(_materialGPU, renderingDatas);
         }
 
          /// <summary>
