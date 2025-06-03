@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Generator
 {
@@ -10,7 +11,6 @@ namespace LibNoise.Generator
     {
         #region Fields
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/SphericalCylinder");
         private Material _materialGPU;
         private double _frequency = 1.0;
 
@@ -62,7 +62,7 @@ namespace LibNoise.Generator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Cylinders);
 
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
             _materialGPU.SetFloat("_Radius", 1f);
@@ -70,7 +70,7 @@ namespace LibNoise.Generator
             _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
             _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas.size, (int)renderingDatas.projection);
         }
 
         /// <summary>

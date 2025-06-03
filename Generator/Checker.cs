@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Generator
 {
@@ -9,7 +10,6 @@ namespace LibNoise.Generator
     public class Checker : SerializableModuleBase
     {
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/SphericalChecker");
         private Material _materialGPU;
 
         #region Constructors
@@ -35,13 +35,13 @@ namespace LibNoise.Generator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Checker);
 
             _materialGPU.SetFloat("_Radius", 1f);
             _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
             _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
 
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas.size, (int)renderingDatas.projection);
         }
 
         /// <summary>

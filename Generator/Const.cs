@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Generator
 {
@@ -9,7 +10,6 @@ namespace LibNoise.Generator
     {
         #region Fields
 
-        private Shader _sphericalGPUShader = Shader.Find("Xnoise/Generators/Const");
         private Material _materialGPU;
         private double _value;
 
@@ -61,7 +61,7 @@ namespace LibNoise.Generator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(_sphericalGPUShader);
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Const);
 
             _materialGPU.SetFloat("_Const", (float)_value);
 
