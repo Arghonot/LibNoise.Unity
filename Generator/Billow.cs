@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise.Generator
 {
@@ -129,7 +130,7 @@ namespace LibNoise.Generator
         /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
-            _materialGPU = new Material(Shader.Find(GetCorrespondingShader(renderingDatas.projection)));
+            _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Billow);
 
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
             _materialGPU.SetFloat("_Lacunarity", (float)_lacunarity);
@@ -140,7 +141,7 @@ namespace LibNoise.Generator
             _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
             _materialGPU.SetFloat("_Seed", (float)_seed);
             
-            return GetImage(_materialGPU, renderingDatas.size);
+            return GetImage(_materialGPU, renderingDatas.size, (int)renderingDatas.projection);
         }
 
         /// <summary>
