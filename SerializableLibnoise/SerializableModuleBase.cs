@@ -166,8 +166,18 @@ namespace LibNoise
             return readableText;
         }
 
-        protected RenderTexture GetImage(Material material, GPURenderingDatas renderingDatas)
+        protected RenderTexture GetImage(Material material, GPURenderingDatas renderingDatas, bool isGenerator = false)
         {
+            if (isGenerator)
+            {
+                material.SetVector("_Rotation", renderingDatas.quaternionRotation);
+                material.SetVector("_OffsetPosition", renderingDatas.origin);
+                material.SetFloat("_Radius", 1f);
+                material.SetFloat("_TurbulencePower", renderingDatas.turbulencePower);
+                material.SetVector("_Scale", renderingDatas.scale);
+                material.SetTexture("_TurbulenceMap", renderingDatas.displacementMap);
+            }
+            
             RenderTexture rdB = RdbCollection.GetFromStack(renderingDatas.size);
 
             RenderTexture.active = rdB;

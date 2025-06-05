@@ -61,12 +61,8 @@ namespace LibNoise.Generator
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Spheres);
 
-            _materialGPU.SetFloat("_Radius", 1f); // TODO use real radius
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
-            _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
-            _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
-
-            return GetImage(_materialGPU, renderingDatas);
+            return GetImage(_materialGPU, renderingDatas, true);
         }
         /// <summary>
         /// Returns the output value for the given input coordinates.

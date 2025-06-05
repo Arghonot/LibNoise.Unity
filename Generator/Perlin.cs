@@ -134,13 +134,7 @@ namespace LibNoise.Generator
             _materialGPU.SetFloat("_Octaves", _octaveCount);
             _materialGPU.SetFloat("_Seed", _seed);
 
-            _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
-            _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
-            _materialGPU.SetFloat("_Radius", 1f);
-            _materialGPU.SetVector("_Scale", renderingDatas.scale);
-            _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
-
-            return GetImage(_materialGPU, renderingDatas);
+            return GetImage(_materialGPU, renderingDatas, true);
         }
 
         /// <summary>

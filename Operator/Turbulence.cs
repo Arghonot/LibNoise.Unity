@@ -156,13 +156,23 @@ namespace LibNoise.Operator
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Turbulence);
 
-            _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
+            var tmpTurbulence = renderingDatas.displacementMap;
+            Vector3 tmpTranslate = renderingDatas.origin;
+            //_materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
+            renderingDatas.origin = new Vector3((float)X0, (float)Y0, (float)Z0);
             _materialGPU.SetTexture("_PerlinA", new Perlin().GetValueGPU(renderingDatas));
+            renderingDatas.origin = new Vector3((float)X1, (float)Y1, (float)Z1);
             _materialGPU.SetTexture("_PerlinB", new Perlin().GetValueGPU(renderingDatas));
+            renderingDatas.origin = new Vector3((float)X2, (float)Y2, (float)Z2);
             _materialGPU.SetTexture("_PerlinC", new Perlin().GetValueGPU(renderingDatas));
             _materialGPU.SetFloat("_Power", (float)Power);
+            renderingDatas.origin = tmpTranslate;
+            renderingDatas.displacementMap = GetImage(_materialGPU, renderingDatas);
 
-            return GetImage(_materialGPU, renderingDatas);
+            var value = Modules[0].GetValueGPU(renderingDatas);
+            //renderingDatas.displacementMap = tmpTurbulence;
+
+            return value;
         }
         /// <summary>
         /// Returns the output value for the given input coordinates.

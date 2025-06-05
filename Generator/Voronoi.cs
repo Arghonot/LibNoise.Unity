@@ -99,16 +99,12 @@ namespace LibNoise.Generator
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Voronoi);
 
-            _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
-            _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
             _materialGPU.SetFloat("_Displacement", (float)_displacement);
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
             _materialGPU.SetInt("_Distance", _distance ? 2 : 0);
-            _materialGPU.SetTexture("_DisplacementMap", renderingDatas.displacementMap);
             _materialGPU.SetInt("_Seed", _seed);
-            _materialGPU.SetFloat("_Radius", 1f);
 
-            return GetImage(_materialGPU, renderingDatas);
+            return GetImage(_materialGPU, renderingDatas, true);
         }
 
          /// <summary>

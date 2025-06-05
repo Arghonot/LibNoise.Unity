@@ -43,6 +43,7 @@ namespace LibNoise
         public Vector3 scale = Vector3.one;
         public Vector3 rotation;
         public RenderTexture displacementMap;
+        public float turbulencePower;
         public Vector4 quaternionRotation 
         { 
             get
@@ -61,8 +62,8 @@ namespace LibNoise
 
         private void GetBlackTexture()
         {
-            RenderTexture rdB = new RenderTexture((int)size.x, (int)size.y, 16, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
-            Graphics.Blit(Texture2D.blackTexture, rdB);
+            displacementMap = new RenderTexture((int)size.x, (int)size.y, 16, RenderTextureFormat.RGBAUShort, RenderTextureReadWrite.Default);
+            Graphics.Blit(Texture2D.blackTexture, displacementMap);
             //displacementMap = new Texture2D((int)_size.x, (int)size.y);
             //UnityEngine.Color[] pixels = Enumerable.Repeat(UnityEngine.Color.black, displacementMap.width * displacementMap.height).ToArray();
             //displacementMap.SetPixels(pixels);
@@ -369,7 +370,7 @@ namespace LibNoise
         /// <param name="top">The clip region to the top.</param>
         /// <param name="bottom">The clip region to the bottom.</param>
         /// <param name="isSeamless">Indicates whether the resulting noise map should be seamless.</param>
-        public void GeneratePlanar(double left, double right, double top, double bottom, bool isSeamless = true)
+        public void GeneratePlanar(double left, double right, double top, double bottom, bool isSeamless = true, Texture2D texture2d = null)
         {
             if (right <= left || bottom <= top)
             {
@@ -385,15 +386,25 @@ namespace LibNoise
             }
             else
             {
-                GeneratePlanarGPU(left, right, top, bottom, isSeamless);
+                GeneratePlanarGPU(left, right, top, bottom, isSeamless, texture2d);
             }
         }
 
-        private void GeneratePlanarGPU(double left, double right, double top, double bottom, bool isSeamless = true)
+        public GPURenderingDatas datas;
+
+        private void GeneratePlanarGPU(double left, double right, double top, double bottom, bool isSeamless = true, Texture2D tex = null)
         {
             // set texture here
-            GPURenderingDatas datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Flat, RenderingAreaData.standardCartesian);
+            datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Flat, RenderingAreaData.standardCartesian);
 
+            if (tex != null)
+            {
+                RenderTexture rt = new RenderTexture(tex.width / 2, tex.height / 2, 0);
+                RenderTexture.active = rt;
+                // Copy your texture ref to the render texture
+                Graphics.Blit(tex, rt);
+                datas.displacementMap = rt;
+            }
             //datas.origin = origin;
             // set texture here
             renderedTexture = _generator.GetValueGPU(datas);

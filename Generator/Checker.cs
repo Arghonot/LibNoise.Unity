@@ -33,12 +33,7 @@ namespace LibNoise.Generator
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Checker);
-
-            _materialGPU.SetFloat("_Radius", 1f);
-            _materialGPU.SetVector("_OffsetPosition", renderingDatas.origin);
-            _materialGPU.SetVector("_Rotation", renderingDatas.quaternionRotation);
-
-            return GetImage(_materialGPU, renderingDatas);
+            return GetImage(_materialGPU, renderingDatas, true);
         }
 
         /// <summary>
