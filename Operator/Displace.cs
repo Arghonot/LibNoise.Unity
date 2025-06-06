@@ -107,27 +107,20 @@ namespace LibNoise.Operator
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Displace);
 
+            var tmpDisplacementMap = renderingDatas.displacementMap;
+            _materialGPU.SetTexture("_OriginalDisplacementMap", renderingDatas.displacementMap);
             _materialGPU.SetTexture("_TextureA", Modules[1].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureB", Modules[2].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureC", Modules[3].GetValueGPU(renderingDatas));
 
-            var tmpDisplacementMap = renderingDatas.displacementMap;
+            ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", "BEFORE");
+
             renderingDatas.displacementMap = GetImage(_materialGPU, renderingDatas);
+            ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", "AFTER");
             var render = Modules[0].GetValueGPU(renderingDatas);
             renderingDatas.displacementMap = tmpDisplacementMap;
 
             return render;
-        }
-
-        private void SaveRenderTexture(RenderTexture renderedTexture)
-        {
-            var tex = new Texture2D(renderedTexture.width, renderedTexture.height);
-            tex.ReadPixels(new Rect(0, 0, renderedTexture.width, renderedTexture.height), 0, 0);
-            tex.Apply();
-
-            UnityEngine.Debug.Log(Application.dataPath + "/" + "DisplacementMap" + ".png");
-
-            File.WriteAllBytes(Application.dataPath + "/" + "DisplacementMap" + ".png", tex.EncodeToPNG());
         }
          
          /// <summary>

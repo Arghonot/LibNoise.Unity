@@ -62,7 +62,7 @@ namespace LibNoise
 
         private void GetBlackTexture()
         {
-            displacementMap = new RenderTexture((int)size.x, (int)size.y, 16, RenderTextureFormat.RGBAUShort, RenderTextureReadWrite.Default);
+            displacementMap = new RenderTexture((int)size.x, (int)size.y, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
             Graphics.Blit(Texture2D.blackTexture, displacementMap);
             //displacementMap = new Texture2D((int)_size.x, (int)size.y);
             //UnityEngine.Color[] pixels = Enumerable.Repeat(UnityEngine.Color.black, displacementMap.width * displacementMap.height).ToArray();

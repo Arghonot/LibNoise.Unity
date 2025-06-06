@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
+using Xnoise;
 using Debug = System.Diagnostics.Debug;
 
 namespace LibNoise
@@ -177,11 +178,12 @@ namespace LibNoise
                 material.SetVector("_Scale", renderingDatas.scale);
                 material.SetTexture("_TurbulenceMap", renderingDatas.displacementMap);
             }
-            
+
+            ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", $"{material.shader.name.Replace("/", "-")}_displacementMap_{Xnoise.Renderer.index}");
             RenderTexture rdB = RdbCollection.GetFromStack(renderingDatas.size);
 
             RenderTexture.active = rdB;
-            Graphics.Blit(Texture2D.whiteTexture, rdB, material, (int)renderingDatas.projection);
+            Graphics.Blit(Texture2D.whiteTexture, rdB, material, isGenerator ? (int)renderingDatas.projection : 0);
 
             RdbCollection.AddToStack(rdB);
 
