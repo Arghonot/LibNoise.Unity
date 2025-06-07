@@ -110,14 +110,13 @@ namespace LibNoise.Operator
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Curve);
-            RenderTexture src = Modules[0].GetValueGPU(renderingDatas);
 
             if (curve == null)
             {
                 curve = UtilsFunctions.GetCurveAsTexture(mathematicalCurve);
             }
 
-            _materialGPU.SetTexture("_Src", src);
+            _materialGPU.SetTexture("_Src", Modules[0].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_Gradient", curve);
 
             return GetImage(_materialGPU, renderingDatas);
