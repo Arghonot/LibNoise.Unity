@@ -179,11 +179,11 @@ namespace LibNoise
                 material.SetTexture("_TurbulenceMap", renderingDatas.displacementMap);
             }
 
-            ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", $"{material.shader.name.Replace("/", "-")}_displacementMap_{Xnoise.Renderer.index}");
+            //ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", $"{material.shader.name.Replace("/", "-")}_displacementMap_{Xnoise.Renderer.index}");
             RenderTexture rdB = RdbCollection.GetFromStack(renderingDatas.size);
 
             RenderTexture.active = rdB;
-            Graphics.Blit(Texture2D.whiteTexture, rdB, material, isGenerator ? (int)renderingDatas.projection : 0);
+            Graphics.Blit(Texture2D.blackTexture, rdB, material, isGenerator ? (int)renderingDatas.projection : 0);
 
             RdbCollection.AddToStack(rdB);
 
