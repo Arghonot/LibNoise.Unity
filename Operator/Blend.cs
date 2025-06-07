@@ -67,7 +67,7 @@ namespace LibNoise.Operator
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureB", Modules[1].GetValueGPU(renderingDatas));
-            _materialGPU.SetTexture("_TextureC", Modules[2].GetValueGPU(renderingDatas));
+            _materialGPU.SetTexture("_Controller", Modules[2].GetValueGPU(renderingDatas));
 
             return GetImage(_materialGPU, renderingDatas);
         }
