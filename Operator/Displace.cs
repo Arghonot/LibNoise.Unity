@@ -12,6 +12,13 @@ namespace LibNoise.Operator
     /// </summary>
     public class Displace : SerializableModuleBase
     {
+        #region Fields
+
+        private double _influence = 1.0;
+        
+        #endregion
+
+
         #region Constructors
 
         /// <summary>
@@ -29,18 +36,25 @@ namespace LibNoise.Operator
         /// <param name="x">The displacement module of the x-axis.</param>
         /// <param name="y">The displacement module of the y-axis.</param>
         /// <param name="z">The displacement module of the z-axis.</param>
-        public Displace(SerializableModuleBase input, SerializableModuleBase x, SerializableModuleBase y, SerializableModuleBase z)
+        public Displace(SerializableModuleBase input, SerializableModuleBase x, SerializableModuleBase y, SerializableModuleBase z, double influence = 1f)
             : base(4)
         {
             Modules[0] = input;
             Modules[1] = x;
             Modules[2] = y;
             Modules[3] = z;
+            _influence = influence;
         }
 
         #endregion
 
         #region Properties
+
+        public double Influence
+        {
+            get { return _influence; }
+            set { _influence = value; }
+        }
 
         /// <summary>
         /// Gets or sets the controlling module on the x-axis.
@@ -84,25 +98,6 @@ namespace LibNoise.Operator
         #endregion
 
         #region ModuleBase Members
-
-
-        //private float getValue(RenderingAreaData area, Vector3 origin, int index, ProjectionType projection = ProjectionType.Flat)
-        //{
-        //    var rt = Modules[0].GetValueGPU(renderingDatas);
-        //    Texture2D tex = new Texture2D(rt.width, rt.height);
-        //    tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
-
-        //    UnityEngine.Debug.Log(tex.width + " " + tex.height);
-        //    return (tex.GetPixel(0, 0).grayscale + 1f) / 2f;
-        //}
-
-        /// <summary>
-        /// Render this generator using a spherical shader.
-        /// </summary>
-        /// <param name="renderingDatas"></param>
-        /// <returns>The generated image.</returns>
-        /// 
-        /// 
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Displace);
@@ -112,6 +107,7 @@ namespace LibNoise.Operator
             _materialGPU.SetTexture("_TextureA", Modules[1].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureB", Modules[2].GetValueGPU(renderingDatas));
             _materialGPU.SetTexture("_TextureC", Modules[3].GetValueGPU(renderingDatas));
+            _materialGPU.SetFloat("_Influence", (float)_influence);
 
             ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", "BEFORE");
 
