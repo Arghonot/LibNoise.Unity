@@ -106,13 +106,6 @@ namespace LibNoise.Operator
 
             renderingDatas.origin = tmpOrigin;
             return input;
-
-            //_materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(size, area, , projection));
-            //_materialGPU.SetFloat("_X", (float)X);
-            //_materialGPU.SetFloat("_Y", (float)Y);
-            //_materialGPU.SetFloat("_Z", (float)Z);
-
-            //return GetImage(_materialGPU, size);
         }
         /// <summary>
         /// Returns the output value for the given input coordinates.
