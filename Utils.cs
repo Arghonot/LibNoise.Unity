@@ -15,7 +15,7 @@ namespace LibNoise
             private const int GeneratorNoiseZ = 263;
             private const int GeneratorSeed = 1013;
             private const int GeneratorShift = 13;
-        #else
+#else
         private const int GeneratorNoiseX = 1619;
         private const int GeneratorNoiseY = 31337;
         private const int GeneratorNoiseZ = 6971;
@@ -165,36 +165,36 @@ namespace LibNoise
 
         internal static double GradientCoherentNoise3D(double x, double y, double z, long seed, QualityMode quality)
         {
-            var x0 = x > 0.0 ? (int) x : (int) x - 1;
+            var x0 = x > 0.0 ? (int)x : (int)x - 1;
             var x1 = x0 + 1;
-            var y0 = y > 0.0 ? (int) y : (int) y - 1;
+            var y0 = y > 0.0 ? (int)y : (int)y - 1;
             var y1 = y0 + 1;
-            var z0 = z > 0.0 ? (int) z : (int) z - 1;
+            var z0 = z > 0.0 ? (int)z : (int)z - 1;
             var z1 = z0 + 1;
             double xs = 0, ys = 0, zs = 0;
             switch (quality)
             {
                 case QualityMode.Low:
-                {
-                    xs = (x - x0);
-                    ys = (y - y0);
-                    zs = (z - z0);
-                    break;
-                }
+                    {
+                        xs = (x - x0);
+                        ys = (y - y0);
+                        zs = (z - z0);
+                        break;
+                    }
                 case QualityMode.Medium:
-                {
-                    xs = MapCubicSCurve(x - x0);
-                    ys = MapCubicSCurve(y - y0);
-                    zs = MapCubicSCurve(z - z0);
-                    break;
-                }
+                    {
+                        xs = MapCubicSCurve(x - x0);
+                        ys = MapCubicSCurve(y - y0);
+                        zs = MapCubicSCurve(z - z0);
+                        break;
+                    }
                 case QualityMode.High:
-                {
-                    xs = MapQuinticSCurve(x - x0);
-                    ys = MapQuinticSCurve(y - y0);
-                    zs = MapQuinticSCurve(z - z0);
-                    break;
-                }
+                    {
+                        xs = MapQuinticSCurve(x - x0);
+                        ys = MapQuinticSCurve(y - y0);
+                        zs = MapQuinticSCurve(z - z0);
+                        break;
+                    }
             }
             var n0 = GradientNoise3D(x, y, z, x0, y0, z0, seed);
             var n1 = GradientNoise3D(x, y, z, x1, y0, z0, seed);
@@ -225,7 +225,7 @@ namespace LibNoise
             var xvp = (fx - ix);
             var yvp = (fy - iy);
             var zvp = (fz - iz);
-            return ((xvg * xvp) + (yvg * yvp) + (zvg * zvp)) * 0.5773502692d;// * 2.12;
+            return ((xvg * xvp) + (yvg * yvp) + (zvg * zvp)) * 2.12;
         }
 
         internal static double InterpolateCubic(double a, double b, double c, double d, double position)

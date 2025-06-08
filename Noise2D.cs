@@ -689,8 +689,7 @@ namespace LibNoise
                     {
                         sample = _data[x, y];
                     }
-                    pixels[x + y * _width] = gradient.Evaluate((sample + (distance / 2f)) / distance);
-                    //Debug.Log((sample + (distance / 2f)) / distance);
+                    pixels[x + y * _width] = gradient.Evaluate((sample + 1) / 2);
                 }
             }
             texture.SetPixels(pixels);
