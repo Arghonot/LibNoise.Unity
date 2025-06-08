@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
+using Xnoise;
 
 namespace LibNoise
 {
@@ -625,6 +626,28 @@ namespace LibNoise
             if (useGPU)
             {
                 RenderTexture.active = renderedTexture;
+                var tex = new Texture2D(renderedTexture.width, renderedTexture.height);
+                tex.ReadPixels(new Rect(0, 0, renderedTexture.width, renderedTexture.height), 0, 0);
+                tex.Apply();
+
+                return tex;
+            }
+            else
+            {
+                return GetTexture(GradientPresets.Grayscale);
+            }
+        }
+
+        public Texture2D GetTextureVisualization()
+        {
+            if (useGPU)
+            {
+                RenderTexture preview = new RenderTexture(renderedTexture.width, renderedTexture.height, 0, RenderTextureFormat.ARGB32);
+                RenderTexture.active = preview;
+                var mat = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Visualizer);
+
+                mat.SetTexture("_Input", renderedTexture);
+                Graphics.Blit(renderedTexture, preview, mat);
                 var tex = new Texture2D(renderedTexture.width, renderedTexture.height);
                 tex.ReadPixels(new Rect(0, 0, renderedTexture.width, renderedTexture.height), 0, 0);
                 tex.Apply();
