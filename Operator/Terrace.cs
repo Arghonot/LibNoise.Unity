@@ -126,20 +126,6 @@ namespace LibNoise.Operator
             }
         }
 
-        public static AnimationCurve GenerateAnimationCurve(List<double> _data)
-        {
-            _data.Sort();
-            Keyframe[] ks = new Keyframe[_data.Count];
-
-            for (int i = 0; i < _data.Count; i++)
-            {
-                ks[i] = new Keyframe(1 * (float)_data[i], 1 * (float)_data[i], 5f, 0f);
-            }
-
-            return new AnimationCurve(ks);
-        }
-
-        // TODO remove old function for V1 release
         public static AnimationCurve CreateCircularTerraceCurve(List<double> ctrlPts, bool invert = false)
         {
             if (ctrlPts == null || ctrlPts.Count < 2)

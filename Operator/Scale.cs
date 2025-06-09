@@ -1,9 +1,7 @@
-﻿using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace LibNoise.Operator
 {
-    // TODO implement scale node
     /// <summary>
     /// Provides a noise module that scales the coordinates of the input value before
     /// returning the output value from a source module. [OPERATOR]
