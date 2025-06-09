@@ -173,7 +173,6 @@ namespace LibNoise.Operator
             ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", "TURBULENCE_AFTER");
 
             var value = Modules[0].GetValueGPU(renderingDatas);
-            //renderingDatas.displacementMap = tmpTurbulence;
 
             return value;
         }

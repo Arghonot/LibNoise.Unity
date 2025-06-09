@@ -126,7 +126,7 @@ namespace LibNoise.Operator
             }
         }
 
-        public void GenerateAnimationCurve()
+        public static AnimationCurve GenerateAnimationCurve(List<double> _data)
         {
             _data.Sort();
             Keyframe[] ks = new Keyframe[_data.Count];
@@ -136,7 +136,42 @@ namespace LibNoise.Operator
                 ks[i] = new Keyframe(1 * (float)_data[i], 1 * (float)_data[i], 5f, 0f);
             }
 
-            curve = new AnimationCurve(ks);
+            return new AnimationCurve(ks);
+        }
+
+        // TODO remove old function for V1 release
+        public static AnimationCurve CreateCircularTerraceCurve(List<double> ctrlPts, bool invert = false)
+        {
+            if (ctrlPts == null || ctrlPts.Count < 2)
+                throw new System.ArgumentException("Need at least 2 control points");
+
+            var curve = new AnimationCurve();
+
+            for (int i = 0; i < ctrlPts.Count - 1; i++)
+            {
+                float x0 = (float)ctrlPts[i];
+                float x1 = (float)ctrlPts[i + 1];
+                float dx = x1 - x0;
+                if (dx <= 0) continue;
+
+                float y0 = invert ? x1 : x0;
+                float y1 = invert ? x0 : x1;
+
+                var k0 = new Keyframe(x0, y0, 0, 0);
+                curve.AddKey(k0);
+
+                float xm = x0 + dx / 2f;
+                float ym = (y0 + y1) / 2f;
+
+                float arcSlope = (y1 - y0) / (dx * 0.5f); // Tangent as rise/run
+                var km = new Keyframe(xm, ym, arcSlope, arcSlope);
+                curve.AddKey(km);
+
+                var k1 = new Keyframe(x1, y1, 0, 0);
+                curve.AddKey(k1);
+            }
+
+            return curve;
         }
 
         #endregion
@@ -153,13 +188,18 @@ namespace LibNoise.Operator
         public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Terrace);
-            RenderTexture src = Modules[0].GetValueGPU(renderingDatas);
-            GenerateAnimationCurve();
+            curve = CreateCircularTerraceCurve(_data, _inverted);
+            var input = Modules[0].GetValueGPU(renderingDatas);
 
-            _materialGPU.SetTexture("_Src", src);
+            _materialGPU.SetTexture("_Src", input);
             _materialGPU.SetTexture("_Gradient", UtilsFunctions.GetCurveAsTexture(curve));
 
-            return GetImage(_materialGPU, renderingDatas);
+            ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(input), "/", "TERRACE_INPUT");
+
+            var res = GetImage(_materialGPU, renderingDatas);
+            ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(res), "/", "TERRACE_OUTPUT");
+
+            return res;
         }
 
         private void SaveRenderTexture(Texture2D tex)
@@ -181,7 +221,7 @@ namespace LibNoise.Operator
             System.Diagnostics.Debug.Assert(Modules[0] != null);
             System.Diagnostics.Debug.Assert(ControlPointCount >= 2);
 
-            GenerateAnimationCurve();
+            curve = GenerateAnimationCurve(_data);
             var smv = Modules[0].GetValueCPU(x, y, z);
 
             return curve.Evaluate((float)smv);

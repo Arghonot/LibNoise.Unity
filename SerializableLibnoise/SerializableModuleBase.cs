@@ -36,7 +36,12 @@ namespace LibNoise
             //    return rdbs.Pop();
             //}
 
-            return new RenderTexture((int)size.x, (int)size.y, 0, RenderTextureFormat.RFloat);
+            RenderTexture rt = new RenderTexture((int)size.x, (int)size.y, 0, RenderTextureFormat.RFloat);
+
+            rt.wrapMode = TextureWrapMode.Clamp;
+            rt.Create();
+
+            return rt;
         }
     }
 
