@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Xml.Serialization;
 using UnityEngine;
-using Xnoise;
+using XNoise;
 
 namespace LibNoise
 {

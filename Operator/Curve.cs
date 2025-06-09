@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Xnoise;
+using XNoise;
 using Debug = System.Diagnostics.Debug;
 
 namespace LibNoise.Operator

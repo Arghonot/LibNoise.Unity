@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using UnityEngine;
-using Xnoise;
+using XNoise;
 
 namespace LibNoise.Operator
 {

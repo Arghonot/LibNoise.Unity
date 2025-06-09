@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
-using Xnoise;
+using XNoise;
 using Debug = System.Diagnostics.Debug;
 
 namespace LibNoise
