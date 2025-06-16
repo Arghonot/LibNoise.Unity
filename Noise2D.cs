@@ -493,7 +493,6 @@ namespace LibNoise
             }
         }
 
-        // TODO keep the complex pipeline with all these functions just for a different type of projection ? A switch case would surely be more efficient
         private void GenerateCylindricalGPU() 
         {
             GPURenderingDatas datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Cylindrical, RenderingAreaData.standardCylindrical);
