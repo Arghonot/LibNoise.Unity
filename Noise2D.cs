@@ -108,7 +108,8 @@ namespace LibNoise
         #region Fields
         public bool useGPU = false;
         public Vector3 origin;
-        private RenderTexture renderedTexture;
+        public RenderTexture renderTexture { get => _renderedTexture; }
+        private RenderTexture _renderedTexture;
         private int _width;
         private int _height;
         private float[,] _data;
@@ -330,8 +331,6 @@ namespace LibNoise
                         sample = data[x, y];
                     }
                     result[x, y] = sample;
-
-                    Debug.Log(sample);
                 }
             }
             return result;
@@ -408,7 +407,7 @@ namespace LibNoise
             }
             //datas.origin = origin;
             // set texture here
-            renderedTexture = _generator.GetValueGPU(datas);
+            _renderedTexture = _generator.GetValueGPU(datas);
         }
 
         private void GeneratePlanarCPU(double left, double right, double top, double bottom, bool isSeamless = true)
@@ -496,7 +495,7 @@ namespace LibNoise
         private void GenerateCylindricalGPU() 
         {
             GPURenderingDatas datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Cylindrical, RenderingAreaData.standardCylindrical);
-            renderedTexture = _generator.GetValueGPU(datas);
+            _renderedTexture = _generator.GetValueGPU(datas);
         }
 
         private void GenerateCylindricalCPU(double angleMin, double angleMax, double heightMin, double heightMax)
@@ -576,7 +575,7 @@ namespace LibNoise
 
             //datas.origin = origin;
             // set texture here
-            renderedTexture = _generator.GetValueGPU(datas);
+            _renderedTexture = _generator.GetValueGPU(datas);
         }
 
         private void GenerateSphericalCPU(double south, double north, double west, double east)
@@ -624,9 +623,9 @@ namespace LibNoise
         {
             if (useGPU)
             {
-                RenderTexture.active = renderedTexture;
-                var tex = new Texture2D(renderedTexture.width, renderedTexture.height);
-                tex.ReadPixels(new Rect(0, 0, renderedTexture.width, renderedTexture.height), 0, 0);
+                RenderTexture.active = _renderedTexture;
+                var tex = new Texture2D(_renderedTexture.width, _renderedTexture.height);
+                tex.ReadPixels(new Rect(0, 0, _renderedTexture.width, _renderedTexture.height), 0, 0);
                 tex.Apply();
 
                 return tex;
@@ -637,18 +636,18 @@ namespace LibNoise
             }
         }
 
-        public Texture2D GetTextureVisualization()
+        public Texture2D GetFinalizedTexture()
         {
             if (useGPU)
             {
-                RenderTexture preview = new RenderTexture(renderedTexture.width, renderedTexture.height, 0, RenderTextureFormat.ARGB32);
+                RenderTexture preview = new RenderTexture(_renderedTexture.width, _renderedTexture.height, 0, RenderTextureFormat.ARGB32);
                 RenderTexture.active = preview;
                 var mat = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Visualizer);
 
-                mat.SetTexture("_Input", renderedTexture);
-                Graphics.Blit(renderedTexture, preview, mat);
-                var tex = new Texture2D(renderedTexture.width, renderedTexture.height);
-                tex.ReadPixels(new Rect(0, 0, renderedTexture.width, renderedTexture.height), 0, 0);
+                mat.SetTexture("_Input", _renderedTexture);
+                Graphics.Blit(_renderedTexture, preview, mat);
+                var tex = new Texture2D(_renderedTexture.width, _renderedTexture.height);
+                tex.ReadPixels(new Rect(0, 0, _renderedTexture.width, _renderedTexture.height), 0, 0);
                 tex.Apply();
 
                 return tex;
@@ -661,9 +660,9 @@ namespace LibNoise
 
         public RenderTexture getTexture()
         {
-            RenderTexture.active = renderedTexture;
+            RenderTexture.active = _renderedTexture;
 
-            return renderedTexture;
+            return _renderedTexture;
         }
         /// <summary>
         /// Creates a texture map for the current content of the noise map.
@@ -778,6 +777,12 @@ namespace LibNoise
             _data = null;
             _width = 0;
             _height = 0;
+
+            if (_renderedTexture != null)
+            {
+                _renderedTexture.Release();
+                _renderedTexture = null;
+            }
             return true;
         }
 

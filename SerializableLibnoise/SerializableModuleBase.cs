@@ -38,6 +38,8 @@ namespace LibNoise
 
             RenderTexture rt = new RenderTexture((int)size.x, (int)size.y, 0, RenderTextureFormat.RFloat);
 
+            rt.filterMode = FilterMode.Bilinear;
+            rt.useMipMap = false;
             rt.wrapMode = TextureWrapMode.Clamp;
             rt.Create();
 
@@ -184,7 +186,6 @@ namespace LibNoise
                 material.SetTexture("_TurbulenceMap", renderingDatas.displacementMap);
             }
 
-            //ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", $"{material.shader.name.Replace("/", "-")}_displacementMap_{Xnoise.Renderer.index}");
             RenderTexture rdB = RdbCollection.GetFromStack(renderingDatas.size);
 
             RenderTexture.active = rdB;
