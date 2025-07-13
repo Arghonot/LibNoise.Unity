@@ -38,7 +38,7 @@ namespace LibNoise
 
             RenderTexture rt = new RenderTexture((int)size.x, (int)size.y, 0, RenderTextureFormat.RFloat);
 
-            rt.filterMode = FilterMode.Bilinear;
+            rt.filterMode = FilterMode.Point;
             rt.useMipMap = false;
             rt.wrapMode = TextureWrapMode.Clamp;
             rt.Create();
