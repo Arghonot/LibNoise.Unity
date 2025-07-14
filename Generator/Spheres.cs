@@ -57,12 +57,12 @@ namespace LibNoise.Generator
         /// </summary>
         /// <param name="renderingDatas"></param>
         /// <returns>The generated image.</returns>
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Spheres);
 
             _materialGPU.SetFloat("_Frequency", (float)_frequency);
-            return GetImage(_materialGPU, renderingDatas, true);
+            return GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas, true);
         }
         /// <summary>
         /// Returns the output value for the given input coordinates.

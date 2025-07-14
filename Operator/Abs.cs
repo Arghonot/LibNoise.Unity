@@ -41,13 +41,13 @@ namespace LibNoise.Operator
         /// <returns>The generated image.</returns>
         /// 
         /// 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Abs);
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
 
-            return GetImage(_materialGPU, renderingDatas);
+        return GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas);
         }
         /// <summary>
         /// Returns the output value for the given input coordinates.

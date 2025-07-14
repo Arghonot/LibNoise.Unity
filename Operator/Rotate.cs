@@ -134,7 +134,7 @@ namespace LibNoise.Operator
         /// </summary>
         /// <param name="renderingDatas"></param>
         /// <returns>The generated image.</returns>
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             Vector3 tmpRotation = renderingDatas.rotation;
 

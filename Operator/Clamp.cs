@@ -100,7 +100,7 @@ namespace LibNoise.Operator
         /// <returns>The generated image.</returns>
         /// 
         /// 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Clamp);
 
@@ -108,7 +108,7 @@ namespace LibNoise.Operator
             _materialGPU.SetFloat("_Minimum", (float)_min);
             _materialGPU.SetFloat("_Maximum", (float)_max);
 
-            return GetImage(_materialGPU, renderingDatas);
+        return GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas);
         }
 
         /// <summary>

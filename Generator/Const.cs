@@ -58,13 +58,13 @@ namespace LibNoise.Generator
         /// <returns>The generated image.</returns>
         /// 
         /// 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Const);
 
             _materialGPU.SetFloat("_Const", (float)_value);
 
-            return GetImage(_materialGPU, renderingDatas);
+        return GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas);
         }
 
         /// <summary>

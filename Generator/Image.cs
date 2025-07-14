@@ -10,12 +10,12 @@ namespace LibNoise
 
         public Image(int count) : base(count) { }
 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.ReadImage);
             _materialGPU.SetTexture("_TextureA", input);
 
-            return GetImage(_materialGPU, renderingDatas);
+        return GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas);
         }
 
         public override double GetValueCPU(double x, double y, double z)

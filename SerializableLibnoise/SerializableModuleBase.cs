@@ -64,8 +64,7 @@ namespace LibNoise
     /// <summary>
     /// Base class for noise modules.
     /// </summary>
-    [System.Serializable]
-    public class SerializableModuleBase : IDisposable
+    public abstract class SerializableModuleBase : IDisposable
     {
         #region Fields
 
@@ -149,53 +148,6 @@ namespace LibNoise
 
         #region Methods 
 
-        public virtual RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected Texture2D duplicateTexture(Texture2D source)
-        {
-            RenderTexture renderTex = RenderTexture.GetTemporary(
-                        source.width,
-                        source.height,
-                        0,
-                        RenderTextureFormat.Default,
-                        RenderTextureReadWrite.Linear);
-
-            Graphics.Blit(source, renderTex);
-            RenderTexture previous = RenderTexture.active;
-            RenderTexture.active = renderTex;
-            Texture2D readableText = new Texture2D(source.width, source.height);
-            readableText.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
-            readableText.Apply();
-            RenderTexture.active = previous;
-            RenderTexture.ReleaseTemporary(renderTex);
-            return readableText;
-        }
-
-        protected RenderTexture GetImage(Material material, GPURenderingDatas renderingDatas, bool isGenerator = false)
-        {
-            if (isGenerator)
-            {
-                material.SetVector("_Rotation", renderingDatas.quaternionRotation);
-                material.SetVector("_OffsetPosition", renderingDatas.origin);
-                material.SetFloat("_Radius", 1f);
-                material.SetFloat("_TurbulencePower", renderingDatas.turbulencePower);
-                material.SetVector("_Scale", renderingDatas.scale);
-                material.SetTexture("_TurbulenceMap", renderingDatas.displacementMap);
-            }
-
-            RenderTexture rdB = RdbCollection.GetFromStack(renderingDatas.size);
-
-            RenderTexture.active = rdB;
-            Graphics.Blit(Texture2D.blackTexture, rdB, material, isGenerator ? (int)renderingDatas.projection : 0);
-
-            RdbCollection.AddToStack(rdB);
-
-            return rdB;
-        }
-
         /// <summary>
         /// Returns the output value for the given input coordinates.
         /// </summary>
@@ -205,7 +157,7 @@ namespace LibNoise
         /// <returns>The resulting output value.</returns>
         public virtual double GetValueCPU(double x, double y, double z)
         {
-            return 1;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -216,6 +168,11 @@ namespace LibNoise
         public double GetValueCPU(Vector3 coordinate)
         {
             return GetValueCPU(coordinate.x, coordinate.y, coordinate.z);
+        }
+
+        public virtual RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

@@ -171,7 +171,7 @@ namespace LibNoise.Operator
         /// <returns>The generated image.</returns>
         /// 
         /// 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Terrace);
             curve = CreateCircularTerraceCurve(_data, _inverted);
@@ -182,7 +182,7 @@ namespace LibNoise.Operator
 
             ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(input), "/", "TERRACE_INPUT");
 
-            var res = GetImage(_materialGPU, renderingDatas);
+            var res = GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas);
             ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(res), "/", "TERRACE_OUTPUT");
 
             return res;

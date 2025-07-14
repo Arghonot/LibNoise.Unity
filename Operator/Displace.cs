@@ -98,7 +98,7 @@ namespace LibNoise.Operator
         #endregion
 
         #region ModuleBase Members
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Displace);
 
@@ -111,7 +111,7 @@ namespace LibNoise.Operator
 
             ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", "BEFORE");
 
-            renderingDatas.displacementMap = GetImage(_materialGPU, renderingDatas);
+            renderingDatas.displacementMap = GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas);
             ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", "AFTER");
             var render = Modules[0].GetValueGPU(renderingDatas);
             renderingDatas.displacementMap = tmpDisplacementMap;

@@ -88,7 +88,7 @@ namespace LibNoise.Operator
 
         #region ModuleBase Members
 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             Vector3 tmpScale = renderingDatas.scale;
 

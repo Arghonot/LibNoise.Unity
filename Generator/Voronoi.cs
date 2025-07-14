@@ -95,7 +95,7 @@ namespace LibNoise.Generator
         /// <returns>The generated image.</returns>
         /// 
         /// 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Voronoi);
 
@@ -104,7 +104,7 @@ namespace LibNoise.Generator
             _materialGPU.SetInt("_Distance", _distance ? 2 : 0);
             _materialGPU.SetInt("_Seed", _seed);
 
-            return GetImage(_materialGPU, renderingDatas, true);
+            return GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas, true);
         }
 
          /// <summary>

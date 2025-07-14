@@ -168,7 +168,7 @@ namespace LibNoise.Generator
         /// <returns>The generated image.</returns>
         /// 
         /// 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.RidgedMultifractal);
 
@@ -177,7 +177,7 @@ namespace LibNoise.Generator
             _materialGPU.SetFloat("_Seed", (float)_seed);
             _materialGPU.SetFloat("_Octaves", _octaveCount);
 
-            return GetImage(_materialGPU, renderingDatas, true);
+            return GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas, true);
         }
 
          /// <summary>

@@ -1,157 +1,19 @@
 using System;
-using System.Drawing;
-using System.Linq;
-using System.Xml.Serialization;
 using UnityEngine;
 using XNoise;
 
 namespace LibNoise
 {
-    public enum ProjectionType
+    public class CPUNoise2d : Noise2d
     {
-        Flat,
-        Spherical,
-        Cylindrical
-    }
-
-    public struct RenderingAreaData // what ? a helper for rendering areas/coordinates ?
-    {
-        public double left;
-        public double right;
-        public double top;
-        public double bottom;
-
-        public RenderingAreaData(double a, double b, double c, double d)
-        {
-            left = a;
-            right = b;
-            top = c;
-            bottom = d;
-        }
-
-        public static readonly RenderingAreaData standardSpherical = new RenderingAreaData(Noise2D.West, Noise2D.East, Noise2D.North, Noise2D.South);
-        public static readonly RenderingAreaData standardCartesian = new RenderingAreaData(Noise2D.Left, Noise2D.Right, Noise2D.North, Noise2D.South);
-        public static readonly RenderingAreaData standardCylindrical = new RenderingAreaData(Noise2D.AngleMin, Noise2D.AngleMax, Noise2D.Top, Noise2D.Bottom);
-    }
-
-    /// <summary>
-    /// Class contening all the datas necessary for a GPU rendering.
-    /// Aim at allowing the GPU to operate with as much flexibility than CPU.
-    /// </summary>
-    public class GPURenderingDatas
-    {
-        public Vector3 origin = Vector3.zero;
-        public Vector3 scale = Vector3.one;
-        public Vector3 rotation;
-        public RenderTexture displacementMap;
-        public float turbulencePower;
-        public Vector4 quaternionRotation 
-        { 
-            get
-            {
-                Quaternion quat = Quaternion.Euler(rotation);
-                return new Vector4(quat.x, quat.y, quat.z, quat.w);
-            } 
-        }
-        public RenderingAreaData area { get { return _area; } }
-        public ProjectionType projection { get { return _projection; } }
-        public Vector2 size { get { return _size; } }
-
-        private RenderingAreaData _area;
-        private ProjectionType _projection;
-        private Vector2 _size;
-
-        private void GetBlackTexture()
-        {
-            displacementMap = new RenderTexture((int)size.x, (int)size.y, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
-            Graphics.Blit(Texture2D.blackTexture, displacementMap);
-            //displacementMap = new Texture2D((int)_size.x, (int)size.y);
-            //UnityEngine.Color[] pixels = Enumerable.Repeat(UnityEngine.Color.black, displacementMap.width * displacementMap.height).ToArray();
-            //displacementMap.SetPixels(pixels);
-            //displacementMap.Apply();
-        }
-
-        public GPURenderingDatas(Vector2 finalTextureSize, ProjectionType type, RenderingAreaData area)
-        {
-            this._area = area;
-            this._projection = type;
-            this._size = finalTextureSize;
-            this.origin = Vector3.one;
-            this.rotation = Vector3.zero;
-            GetBlackTexture();
-        }
-    }
-
-    /// <summary>
-    /// Provides a two-dimensional noise map.
-    /// </summary>
-	/// <remarks>This covers most of the functionality from LibNoise's noiseutils library, but 
-	/// the method calls might not be the same. See the tutorials project if you're wondering
-	/// which calls are equivalent.</remarks>
-    public class Noise2D : IDisposable
-    {
-        #region Constants
-
-        public static readonly double South = -90.0;
-        public static readonly double North = 90.0;
-        public static readonly double West = -180.0;
-        public static readonly double East = 180.0;
-        public static readonly double AngleMin = -180.0;
-        public static readonly double AngleMax = 180.0;
-        public static readonly double Left = -1.0;
-        public static readonly double Right = 1.0;
-        public static readonly double Top = -1.0;
-        public static readonly double Bottom = 1.0;
-
-        #endregion
-
+        // some of these fields are bound to move to Noise2d in the future like border and such when the gpu counterparts will implement them.
         #region Fields
-        public bool useGPU = false;
-        public Vector3 origin;
-        public RenderTexture renderTexture { get => _renderedTexture; }
-        private RenderTexture _renderedTexture;
-        private int _width;
-        private int _height;
-        private float[,] _data;
-        private readonly int _ucWidth;
-        private readonly int _ucHeight;
-        private int _ucBorder = 1; // Border size of extra noise for uncropped data.
 
-        private readonly float[,] _ucData;
-            // Uncropped data. This has a border of extra noise data used for calculating normal map edges.
-
-        private float _borderValue = float.NaN;
-        private SerializableModuleBase _generator;
+        protected float[,] _data;
+        protected readonly float[,] _ucData;
+        // Uncropped data. This has a border of extra noise data used for calculating normal map edges.
 
         #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of Noise2D.
-        /// </summary>
-        protected Noise2D()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of Noise2D.
-        /// </summary>
-        /// <param name="size">The width and height of the noise map.</param>
-        public Noise2D(int size)
-            : this(size, size, null)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of Noise2D.
-        /// </summary>
-        /// <param name="size">The width and height of the noise map.</param>
-        /// <param name="generator">The generator module.</param>
-        public Noise2D(int size, SerializableModuleBase generator)
-            : this(size, size, generator)
-        {
-        }
 
         /// <summary>
         /// Initializes a new instance of Noise2D.
@@ -159,18 +21,11 @@ namespace LibNoise
         /// <param name="width">The width of the noise map.</param>
         /// <param name="height">The height of the noise map.</param>
         /// <param name="generator">The generator module.</param>
-        public Noise2D(int width, int height, SerializableModuleBase generator = null)
+        public CPUNoise2d(int width, int height, SerializableModuleBase generator = null) : base(width, height, generator)
         {
-            _generator = generator;
-            _width = width;
-            _height = height;
             _data = new float[width, height];
-            _ucWidth = width + _ucBorder * 2;
-            _ucHeight = height + _ucBorder * 2;
             _ucData = new float[width + _ucBorder * 2, height + _ucBorder * 2];
         }
-
-        #endregion
 
         #region Indexers
 
@@ -238,17 +93,6 @@ namespace LibNoise
 
         #endregion
 
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the constant value at the noise maps borders.
-        /// </summary>
-        public float Border
-        {
-            get { return _borderValue; }
-            set { _borderValue = value; }
-        }
-
         /// <summary>
         /// Gets or sets the generator module.
         /// </summary>
@@ -258,23 +102,6 @@ namespace LibNoise
             set { _generator = value; }
         }
 
-        /// <summary>
-        /// Gets the height of the noise map.
-        /// </summary>
-        public int Height
-        {
-            get { return _height; }
-        }
-
-        /// <summary>
-        /// Gets the width of the noise map.
-        /// </summary>
-        public int Width
-        {
-            get { return _width; }
-        }
-
-        #endregion
 
         #region Methods
 
@@ -372,45 +199,11 @@ namespace LibNoise
         /// <param name="isSeamless">Indicates whether the resulting noise map should be seamless.</param>
         public void GeneratePlanar(double left, double right, double top, double bottom, bool isSeamless = true, Texture2D texture2d = null)
         {
-            if (right <= left || bottom <= top)
-            {
-                throw new ArgumentException("Invalid right/left or bottom/top combination");
-            }
-            if (_generator == null)
-            {
-                throw new ArgumentNullException("Generator is null");
-            }
-            if (!useGPU)
-            {
-                GeneratePlanarCPU(left, right, top, bottom, isSeamless);
-            }
-            else
-            {
-                GeneratePlanarGPU(left, right, top, bottom, isSeamless, texture2d);
-            }
+            base.GeneratePlanar(left, right, top, bottom, isSeamless);
+            GeneratePlanar(left, right, top, bottom, isSeamless);
         }
 
-        public GPURenderingDatas datas;
-
-        private void GeneratePlanarGPU(double left, double right, double top, double bottom, bool isSeamless = true, Texture2D tex = null)
-        {
-            // set texture here
-            datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Flat, RenderingAreaData.standardCartesian);
-
-            if (tex != null)
-            {
-                RenderTexture rt = new RenderTexture(tex.width / 2, tex.height / 2, 0);
-                RenderTexture.active = rt;
-                // Copy your texture ref to the render texture
-                Graphics.Blit(tex, rt);
-                datas.displacementMap = rt;
-            }
-            //datas.origin = origin;
-            // set texture here
-            _renderedTexture = _generator.GetValueGPU(datas);
-        }
-
-        private void GeneratePlanarCPU(double left, double right, double top, double bottom, bool isSeamless = true)
+        private void GeneratePlanar(double left, double right, double top, double bottom, bool isSeamless = true)
         {
             var xe = right - left;
             var ze = bottom - top;
@@ -472,34 +265,9 @@ namespace LibNoise
         /// <param name="angleMax">The minimum angle of the clip region.</param>
         /// <param name="heightMin">The minimum height of the clip region.</param>
         /// <param name="heightMax">The maximum height of the clip region.</param>
-        public void GenerateCylindrical(double angleMin, double angleMax, double heightMin, double heightMax)
+        private void GenerateCylindrical(double angleMin, double angleMax, double heightMin, double heightMax)
         {
-            if (angleMax <= angleMin || heightMax <= heightMin)
-            {
-                throw new ArgumentException("Invalid angle or height parameters");
-            }
-            if (_generator == null)
-            {
-                throw new ArgumentNullException("Generator is null");
-            }
-            if (!useGPU)
-            {
-                GenerateCylindricalCPU(angleMin, angleMax, heightMin, heightMax);
-            }
-            else 
-            { 
-                GenerateCylindricalGPU(); 
-            }
-        }
-
-        private void GenerateCylindricalGPU() 
-        {
-            GPURenderingDatas datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Cylindrical, RenderingAreaData.standardCylindrical);
-            _renderedTexture = _generator.GetValueGPU(datas);
-        }
-
-        private void GenerateCylindricalCPU(double angleMin, double angleMax, double heightMin, double heightMax)
-        {
+            base.GenerateCylindrical(angleMin, angleMax, heightMin, heightMax);
             var ae = angleMax - angleMin;
             var he = heightMax - heightMin;
             var xd = ae / ((double)_width - _ucBorder);
@@ -535,7 +303,7 @@ namespace LibNoise
             return _generator.GetValueCPU(r * Math.Cos(Mathf.Deg2Rad * lon), Math.Sin(Mathf.Deg2Rad * lat),
                 r * Math.Sin(Mathf.Deg2Rad * lon));
         }
-        
+
         Vector2 bounds = new Vector2();
         float distance;
 
@@ -546,40 +314,9 @@ namespace LibNoise
         /// <param name="north">The clip region to the north.</param>
         /// <param name="west">The clip region to the west.</param>
         /// <param name="east">The clip region to the east.</param>
-        public void GenerateSpherical(double south, double north, double west, double east)
+        private void GenerateSpherical(double south, double north, double west, double east)
         {
-            if (east <= west || south <= north)
-            {
-                throw new ArgumentException("Invalid east/west or north/south combination");
-            }
-            if (_generator == null)
-            {
-                throw new ArgumentNullException("Generator is null");
-            }
-            if (!useGPU)
-            {
-                GenerateSphericalCPU(south, north, west, east);
-            }
-            else
-            {
-                GenerateSphericalGPU(south, north, west, east);
-            }
-        }
-
-
-        private void GenerateSphericalGPU(double south, double north, double west, double east)
-        {
-            Debug.Log("GenerateSphericalGPU");
-
-            GPURenderingDatas datas = new GPURenderingDatas(new Vector2(Width, Height), ProjectionType.Spherical, RenderingAreaData.standardSpherical);
-
-            //datas.origin = origin;
-            // set texture here
-            _renderedTexture = _generator.GetValueGPU(datas);
-        }
-
-        private void GenerateSphericalCPU(double south, double north, double west, double east)
-        {
+            base.GenerateSpherical(south, north, west, east);
             var loe = east - west;
             var lae = north - south;
             var xd = loe / ((double)_width - _ucBorder);
@@ -621,49 +358,14 @@ namespace LibNoise
         /// <returns>The created texture map.</returns>
         public Texture2D GetTexture()
         {
-            if (useGPU)
-            {
-                RenderTexture.active = _renderedTexture;
-                var tex = new Texture2D(_renderedTexture.width, _renderedTexture.height);
-                tex.ReadPixels(new Rect(0, 0, _renderedTexture.width, _renderedTexture.height), 0, 0);
-                tex.Apply();
-
-                return tex;
-            }
-            else
-            {
-                return GetTexture(GradientPresets.Grayscale);
-            }
+            return GetTexture(GradientPresets.Grayscale);
         }
 
         public Texture2D GetFinalizedTexture()
         {
-            if (useGPU)
-            {
-                RenderTexture preview = new RenderTexture(_renderedTexture.width, _renderedTexture.height, 0, RenderTextureFormat.ARGB32);
-                RenderTexture.active = preview;
-                var mat = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Visualizer);
-
-                mat.SetTexture("_Input", _renderedTexture);
-                Graphics.Blit(_renderedTexture, preview, mat);
-                var tex = new Texture2D(_renderedTexture.width, _renderedTexture.height);
-                tex.ReadPixels(new Rect(0, 0, _renderedTexture.width, _renderedTexture.height), 0, 0);
-                tex.Apply();
-
-                return tex;
-            }
-            else
-            {
-                return GetTexture(GradientPresets.Grayscale);
-            }
+            return GetTexture(GradientPresets.Grayscale);
         }
 
-        public RenderTexture getTexture()
-        {
-            RenderTexture.active = _renderedTexture;
-
-            return _renderedTexture;
-        }
         /// <summary>
         /// Creates a texture map for the current content of the noise map.
         /// </summary>
@@ -736,54 +438,6 @@ namespace LibNoise
             texture.wrapMode = TextureWrapMode.Clamp;
             texture.Apply();
             return texture;
-        }
-
-        #endregion
-
-        #region IDisposable Members
-
-        [XmlIgnore]
-#if !XBOX360 && !ZUNE
-        [NonSerialized]
-#endif
-            private bool _disposed;
-
-        /// <summary>
-        /// Gets a value whether the object is disposed.
-        /// </summary>
-        public bool IsDisposed
-        {
-            get { return _disposed; }
-        }
-
-        /// <summary>
-        /// Immediately releases the unmanaged resources used by this object.
-        /// </summary>
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                _disposed = Disposing();
-            }
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Immediately releases the unmanaged resources used by this object.
-        /// </summary>
-        /// <returns>True if the object is completely disposed.</returns>
-        protected virtual bool Disposing()
-        {
-            _data = null;
-            _width = 0;
-            _height = 0;
-
-            if (_renderedTexture != null)
-            {
-                _renderedTexture.Release();
-                _renderedTexture = null;
-            }
-            return true;
         }
 
         #endregion

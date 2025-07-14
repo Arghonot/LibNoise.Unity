@@ -74,14 +74,14 @@ namespace LibNoise.Operator
         /// <returns>The generated image.</returns>
         /// 
         /// 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Exponent);
 
             _materialGPU.SetTexture("_TextureA", Modules[0].GetValueGPU(renderingDatas));
             _materialGPU.SetFloat("_Exponent", (float)_exponent);
 
-            return GetImage(_materialGPU, renderingDatas);
+        return GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas);
         }
 
          /// <summary>

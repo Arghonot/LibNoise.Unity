@@ -70,7 +70,7 @@ namespace LibNoise.Operator
         /// <returns>The generated image.</returns>
         /// 
         /// 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.ScaleBias);
 
@@ -78,7 +78,7 @@ namespace LibNoise.Operator
             _materialGPU.SetFloat("_Bias", (float)Bias);
             _materialGPU.SetFloat("_Scale", (float)Scale);
 
-            return GetImage(_materialGPU, renderingDatas);
+        return GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas);
         }
 
         /// <summary>

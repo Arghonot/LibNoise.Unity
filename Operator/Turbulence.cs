@@ -152,7 +152,7 @@ namespace LibNoise.Operator
         /// <returns>The generated image.</returns>
         /// 
         /// 
-        public override RenderTexture GetValueGPU(GPURenderingDatas renderingDatas)
+        public override RenderTexture GetValueGPU(GPUSurfaceNoise2d.GPURenderingDatas renderingDatas)
         {
             _materialGPU = XNoiseShaderCache.GetMaterial(XNoiseShaderPaths.Turbulence);
 
@@ -169,7 +169,7 @@ namespace LibNoise.Operator
             renderingDatas.origin = tmpOrigin;
 
             ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", "TURBULENCE_BEFORE");
-            renderingDatas.displacementMap = GetImage(_materialGPU, renderingDatas);
+            renderingDatas.displacementMap = GPUSurfaceNoise2d.GetImage(_materialGPU, renderingDatas);
             ImageFileHelpers.SaveToJPG(ImageFileHelpers.toTexture2D(renderingDatas.displacementMap), "/", "TURBULENCE_AFTER");
 
             var value = Modules[0].GetValueGPU(renderingDatas);
